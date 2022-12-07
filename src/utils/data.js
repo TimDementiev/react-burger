@@ -210,3 +210,5 @@ export const initialData = [
      "__v":0
     }
 ]
+
+export default initialData;

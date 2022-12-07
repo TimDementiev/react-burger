@@ -1,0 +1,12 @@
+.app {
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--background-alt);
+    box-sizing: content-box;
+}
+
+*{
+    /* border: 1px red solid; */
+}
