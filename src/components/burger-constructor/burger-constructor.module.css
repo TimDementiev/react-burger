@@ -1,0 +1,53 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.fillingList {
+  justify-self: end;
+  justify-content: flex-end;
+  width: 600px;
+  height: calc(100vh - 516px);
+  overflow-x: hidden;
+  overflow-y: scroll;
+  list-style-type: none;
+  padding: 0;
+}
+
+.fillingList::-webkit-scrollbar {
+  background-color: var(--background-element);
+  width: 8px;
+  margin-left: 8px;
+}
+
+.fillingList::-webkit-scrollbar-thumb {
+  background-color: var(--text-inactive-color);
+}
+
+.fillingItem {
+  display: flex;
+  align-items: center;
+}
+
+.fillingItem:last-of-type {
+  margin-bottom: 0;
+}
+
+.sum {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.costContainer {
+  display: flex;
+  align-items: center;
+}
+
+.cost {
+  padding-right: 10px;
+}
