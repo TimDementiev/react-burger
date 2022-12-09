@@ -1,5 +1,5 @@
 import React from "react";
-import { dataType } from '../../utils/data';
+import { dataType } from "../../utils/types";
 import burgerIngredientsStyles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import IngredientCard from "../ingredient-card/ingredient-card.jsx";
@@ -11,25 +11,13 @@ const BurgerIngredients = ({ data }) => {
     <section className={burgerIngredientsStyles.section}>
       <h1 className={`text text_type_main-large mb-5`}>Соберите бургер</h1>
       <div className={`${burgerIngredientsStyles.tabs}`}>
-        <Tab
-          value="bun"
-          active={current === "bun"}
-          onClick={setCurrent}
-        >
+        <Tab value="bun" active={current === "bun"} onClick={setCurrent}>
           Булки
         </Tab>
-        <Tab
-          value="sauce"
-          active={current === "sauce"}
-          onClick={setCurrent}
-        >
+        <Tab value="sauce" active={current === "sauce"} onClick={setCurrent}>
           Соусы
         </Tab>
-        <Tab
-          value="main"
-          active={current === "main"}
-          onClick={setCurrent}
-        >
+        <Tab value="main" active={current === "main"} onClick={setCurrent}>
           Начинки
         </Tab>
       </div>
@@ -41,13 +29,7 @@ const BurgerIngredients = ({ data }) => {
               (item) =>
                 item.type === "bun" && (
                   <li key={item._id}>
-                    <IngredientCard
-                      _id={item._id}
-                      name={item.name}
-                      type={item.type}
-                      cost={item.price}
-                      image={item.image}
-                    />
+                    <IngredientCard ingredient={item} />
                   </li>
                 )
             )}
@@ -60,13 +42,7 @@ const BurgerIngredients = ({ data }) => {
               (item) =>
                 item.type === "sauce" && (
                   <li key={item._id}>
-                    <IngredientCard
-                      _id={item._id}
-                      name={item.name}
-                      type={item.type}
-                      cost={item.price}
-                      image={item.image}
-                    />
+                    <IngredientCard ingredient={item} />
                   </li>
                 )
             )}
@@ -79,13 +55,7 @@ const BurgerIngredients = ({ data }) => {
               (item) =>
                 item.type === "main" && (
                   <li key={item._id}>
-                    <IngredientCard
-                      _id={item._id}
-                      name={item.name}
-                      type={item.type}
-                      cost={item.price}
-                      image={item.image}
-                    />
+                    <IngredientCard ingredient={item} />
                   </li>
                 )
             )}

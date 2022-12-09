@@ -22,13 +22,13 @@
 
 .button {
     display: flex;
-    /* min-width: max-content; */
     flex-direction: row;
     align-items: center;
     cursor: pointer;
     background: var(--background);
     border-radius: 40px;
     border: none;
+    z-index: 2;
 }
 
 .logo {

@@ -1,4 +1,4 @@
-import { dataType } from '../../utils/data';
+import { dataType } from "../../utils/types";
 import {
   ConstructorElement,
   CurrencyIcon,
@@ -65,7 +65,7 @@ const BurgerConstructor = ({ data }) => {
           </p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button type="primary" size="large">
+        <Button type="primary" size="large" htmlType="button">
           Оформить заказ
         </Button>
       </div>
