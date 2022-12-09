@@ -1,0 +1,46 @@
+.header {
+    box-sizing: content-box;
+    margin: 40px;
+    width: calc(100% - 80px);
+    height: 88px;
+    position: relative;
+    background: var(--background);
+    box-shadow: 0px 24px 32px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
+}
+
+.nav {
+    margin: 0 auto;
+    width: inherit;
+    height: inherit;
+    min-width: 1320px;
+    display: grid;
+    grid-template-columns: repeat(2, max-content) 676px max-content;
+    gap: 8px;
+    justify-content: center;
+    background: var(--background);
+}
+
+.button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+    background: var(--background);
+    border-radius: 40px;
+    border: none;
+    z-index: 2;
+}
+
+.logo {
+    margin: 0 auto;
+    position: absolute;
+    z-index: 0;
+    text-align: center;
+    top: 19px;
+    left: 0;
+    right: 0;
+}
+
+.profile {
+    grid-area: 1/4/1/4;
+}
