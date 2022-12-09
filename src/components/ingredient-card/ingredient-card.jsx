@@ -8,7 +8,6 @@ const IngredientCard = (props) => {
   return (
     <div className={styles.container}>
       <img className={styles.image} src={props.image} alt={props.name} />
-
       <div className={styles.cost}>
         <span className={`text text_type_digits-default`}>{props.cost}</span>
         <CurrencyIcon />

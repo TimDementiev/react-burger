@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { dataType } from '../../utils/data';
 import burgerIngredientsStyles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import IngredientCard from "../ingredient-card/ingredient-card.jsx";
@@ -42,7 +42,6 @@ const BurgerIngredients = ({ data }) => {
                 item.type === "bun" && (
                   <li key={item._id}>
                     <IngredientCard
-                      key={item._id}
                       _id={item._id}
                       name={item.name}
                       type={item.type}
@@ -62,7 +61,6 @@ const BurgerIngredients = ({ data }) => {
                 item.type === "sauce" && (
                   <li key={item._id}>
                     <IngredientCard
-                      key={item._id}
                       _id={item._id}
                       name={item.name}
                       type={item.type}
@@ -82,7 +80,6 @@ const BurgerIngredients = ({ data }) => {
                 item.type === "main" && (
                   <li key={item._id}>
                     <IngredientCard
-                      key={item._id}
                       _id={item._id}
                       name={item.name}
                       type={item.type}
@@ -99,23 +96,6 @@ const BurgerIngredients = ({ data }) => {
   );
 };
 
-BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string,
-      name: PropTypes.string,
-      type: PropTypes.string,
-      proteings: PropTypes.number,
-      fat: PropTypes.number,
-      carbohydrates: PropTypes.number,
-      calories: PropTypes.number,
-      price: PropTypes.number,
-      image: PropTypes.string,
-      image_mobile: PropTypes.string,
-      image_large: PropTypes.string,
-      __v: PropTypes.number,
-    }).isRequired
-  ).isRequired,
-};
+BurgerIngredients.propTypes = dataType;
 
 export default BurgerIngredients;
