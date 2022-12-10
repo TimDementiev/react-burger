@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { dataType } from "../../utils/types";
 import {
   ConstructorElement,
@@ -6,6 +7,8 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerConstructorStyles from "./burger-constructor.module.css";
+import Modal from "../modal/modal";
+import OrderDetails from "../order-details/order-details";
 
 const BurgerConstructor = ({ data }) => {
   const fillings = data.filter((element) => element.type !== "bun");
@@ -14,9 +17,16 @@ const BurgerConstructor = ({ data }) => {
     (total, current) => total + current.price,
     bun.price * 2
   );
+  const [active, setActive] = useState(false);
+  const toggleModal = () => setActive(!active);
 
   return (
     <section className={`${burgerConstructorStyles.section} pt-15`}>
+      {active && (
+        <Modal title="" onClose={toggleModal}>
+          <OrderDetails />
+        </Modal>
+      )}
       <div className="ml-10 mr-4">
         <ConstructorElement
           type="top"
@@ -65,7 +75,12 @@ const BurgerConstructor = ({ data }) => {
           </p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button type="primary" size="large" htmlType="button">
+        <Button
+          type="primary"
+          size="large"
+          htmlType="button"
+          onClick={toggleModal}
+        >
           Оформить заказ
         </Button>
       </div>
