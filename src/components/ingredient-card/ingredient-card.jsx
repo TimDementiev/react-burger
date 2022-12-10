@@ -1,5 +1,3 @@
-import React from "react";
-import PropTypes from 'prop-types';
 import { ingredientType } from "../../utils/types";
 import styles from "./ingredient-card.module.css";
 
@@ -18,7 +16,7 @@ const IngredientCard = (props) => {
       />
       <div className={styles.cost}>
         <span className={`text text_type_digits-default`}>
-          {props.ingredient.cost}
+          {props.ingredient.price}
         </span>
         <CurrencyIcon />
       </div>
