@@ -1,0 +1,39 @@
+.container {
+    max-width: 520px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.list {
+    max-width: 520px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 0;
+    padding-left: 0;
+    padding-right: 0;
+    list-style: none;
+}
+
+.title {
+    align-self: flex-start;
+}
+
+.ingredient {
+    text-align: center;
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.text {
+    text-align: center;
+}

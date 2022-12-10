@@ -8,18 +8,20 @@ import { getData } from "../../utils/api";
 function App() {
   const [state, setData] = useState({
     data: [],
+    loading: true,
   });
 
   useEffect(() => {
+    setData({ ...state, loading: true });
     getData().then((res) => {
-      setData({ data: res.data });
+      setData({ ...state, data: res.data, loading: false });
     });
   }, []);
 
   return (
     <div className={appStyles.app}>
       <AppHeader />
-      {state.data && (
+      {!state.loading && (
         <main className={appStyles.main}>
           <BurgerIngredients data={state.data} />
           <BurgerConstructor data={state.data} />

@@ -1,53 +1,41 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
-import modalStyles from "./modal.module.css";
+import styles from "./modal.module.css";
+import ModalOverlay from "../modal-overlay/modal-overlay";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { ModalOverlay } from "../ModalOverlay";
-import { modalType } from "../../utils/types";
 
-export const Modal = ({ isOpen, title, onClose, children }) => {
-  function stopPropagation(e) {
-    e.stopPropagation();
-  }
+const modalContainer = document.getElementById("modal");
 
+const Modal = ({ title, onClose, children }) => {
   useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (e) => {
+    const handleEscKeydown = (e) => {
       if (e.key === "Escape") {
         onClose();
       }
     };
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keydown", handleEscKeydown);
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keydown", handleEscKeydown);
     };
-  }, [isOpen, onClose]);
-
-  const modalsElement = document.getElementById("modals");
+  }, [onClose]);
 
   return createPortal(
     <>
-      {isOpen && (
-        <ModalOverlay onClose={onClose}>
-          <div className={modalStyles.modal} onClick={stopPropagation}>
-            <button className={modalStyles.closeButton} onClick={onClose}>
-              <CloseIcon type="primary" />
-            </button>
-            <h3
-              className={`${modalStyles.title_container} mt-10 ml-10 mr-10`}
-            >
-              <p className="text text_type_main-large">{title}</p>
-            </h3>
-            <div className="flex column align_items-center justify_content-center">
-              {children}
-            </div>
-          </div>
-        </ModalOverlay>
-      )}
+      <div className={styles.popup}>
+        <h3
+          className={`${styles.title} text text_type_main-large pt-10 pb-1 pl-10`}
+        >
+          {title}
+        </h3>
+        <button className={styles.closeButton} onClick={onClose}>
+          <CloseIcon type="primary" />
+        </button>
+        {children}
+      </div>
+      <ModalOverlay onClose={onClose} />
     </>,
-    modalsElement
+    modalContainer
   );
 };
 
-export const modalPropTypes = modalType;
+export default Modal;

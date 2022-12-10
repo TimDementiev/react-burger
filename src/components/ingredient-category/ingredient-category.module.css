@@ -1,0 +1,8 @@
+.ingredients {
+    list-style: none;
+    padding: 0 16px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    box-sizing: border-box;
+  }

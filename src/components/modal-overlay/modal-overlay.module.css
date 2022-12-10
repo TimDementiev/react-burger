@@ -1,6 +1,4 @@
 .overlay {
-    display: flex;
-    justify-content: center;
     position: fixed;
     top: 0;
     left: 0;
@@ -8,7 +6,9 @@
     bottom: 0;
     overflow: hidden;
     overflow-y: auto;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    z-index: 3;
+    z-index: 1;
     background: rgba(0, 0, 0, 0.6);
 }
