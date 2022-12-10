@@ -3,6 +3,7 @@ import ingredientCategoryStyles from "./ingredient-category.module.css";
 import Modal from "../modal/modal";
 import IngredientCard from "../ingredient-card/ingredient-card.jsx";
 import IngredientDetails from "../ingredient-details/ingredient-details.jsx";
+import { ingredientCategoryType } from "../../utils/types";
 
 const IngredientCategory = (props) => {
   const [active, setActive] = useState(null);
@@ -12,7 +13,7 @@ const IngredientCategory = (props) => {
     <section className="mb-10">
       {active && (
         <Modal onClose={toggleModal}>
-          <IngredientDetails {...active}/>
+          <IngredientDetails {...active} />
         </Modal>
       )}
       <h2 className="text text_type_main-medium mb-6" ref={props.tabRef}>
@@ -22,17 +23,24 @@ const IngredientCategory = (props) => {
         {props.data.map((e) => {
           if (e.type === props.type) {
             return (
-              <li onClick={() => {setActive(e)}} key={e._id}>
-                <IngredientCard {...e}/>
+              <li
+                onClick={() => {
+                  setActive(e);
+                }}
+                key={e._id}
+              >
+                <IngredientCard {...e} />
               </li>
-            )
+            );
           } else {
-            return null
+            return null;
           }
         })}
       </ul>
     </section>
-  )
-}
+  );
+};
 
-export default IngredientCategory
+IngredientCategory.propTypes = ingredientCategoryType;
+
+export default IngredientCategory;
