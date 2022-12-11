@@ -13,7 +13,4 @@ export const getData = () => {
       }
       return Promise.reject(`Ошибка ${res.status} - ${res.statusText}`);
     })
-    .catch((err) => {
-      console.log(err);
-    });
 };
