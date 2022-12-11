@@ -1,7 +1,5 @@
-import React from "react";
-import PropTypes from 'prop-types';
 import { ingredientType } from "../../utils/types";
-import styles from "./ingredient-card.module.css";
+import ingredientCardStyles from "./ingredient-card.module.css";
 
 import {
   CurrencyIcon,
@@ -10,22 +8,22 @@ import {
 
 const IngredientCard = (props) => {
   return (
-    <div className={styles.container}>
+    <div className={ingredientCardStyles.container}>
       <img
-        className={styles.image}
-        src={props.ingredient.image}
-        alt={props.ingredient.name}
+        className={ingredientCardStyles.image}
+        src={props.image}
+        alt={props.name}
       />
-      <div className={styles.cost}>
-        <span className={`text text_type_digits-default`}>
-          {props.ingredient.cost}
-        </span>
+      <div className={ingredientCardStyles.cost}>
+        <span className={`text text_type_digits-default`}>{props.price}</span>
         <CurrencyIcon />
       </div>
-      <h3 className={`${styles.title} text text_type_main-default`}>
-        {props.ingredient.name}
+      <h3
+        className={`${ingredientCardStyles.title} text text_type_main-default`}
+      >
+        {props.name}
       </h3>
-      <Counter count={1} size="default" />
+      {props.__v >= 1 && <Counter count={props.__v} size="default" />}
     </div>
   );
 };
