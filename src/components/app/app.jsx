@@ -3,7 +3,7 @@ import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import appStyles from "./app.module.css";
-import { getData } from "../../utils/api";
+import { getInitialData } from "../../utils/api";
 
 function App() {
   const [state, setData] = useState({
@@ -14,7 +14,7 @@ function App() {
 
   useEffect(() => {
     setData({ ...state, loading: true, error: false });
-    getData()
+    getInitialData()
       .then((res) => {
         setData({ ...state, data: res.data, loading: false });
       })
