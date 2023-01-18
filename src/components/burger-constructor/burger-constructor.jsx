@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { dataType } from "../../utils/types";
 import {
   ConstructorElement,
@@ -10,8 +10,10 @@ import burgerConstructorStyles from "./burger-constructor.module.css";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { getOrderData } from "../../utils/api";
+import { IngredientsContext } from "../../utils/appcontext";
 
-const BurgerConstructor = ({ data }) => {
+const BurgerConstructor = () => {
+  const { data } = useContext(IngredientsContext);
   const fillings = data.filter((element) => element.type !== "bun");
   const bun = data.find((element) => element.type === "bun");
   const totalCost = fillings.reduce(

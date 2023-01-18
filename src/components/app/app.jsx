@@ -4,6 +4,7 @@ import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import appStyles from "./app.module.css";
 import { getInitialData } from "../../utils/api";
+import { IngredientsContext } from "../../utils/appcontext";
 
 function App() {
   const [state, setData] = useState({
@@ -27,14 +28,16 @@ function App() {
   return (
     <div className={appStyles.app}>
       <AppHeader />
-      {state.isLoading && "Loading"}
-      {state.hasError && "Error"}
-      {!state.loading && (
-        <main className={appStyles.main}>
-          <BurgerIngredients data={state.data} />
-          <BurgerConstructor data={state.data} />
-        </main>
-      )}
+      <IngredientsContext.Provider value={state}>
+        {state.isLoading && "Loading"}
+        {state.hasError && "Error"}
+        {!state.loading && (
+          <main className={appStyles.main}>
+            <BurgerIngredients />
+            <BurgerConstructor />
+          </main>
+        )}
+      </IngredientsContext.Provider>
     </div>
   );
 }
