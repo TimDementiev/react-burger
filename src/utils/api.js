@@ -5,11 +5,6 @@ export const api = {
   },
 };
 
-// const checkReponse = (res) => {
-//   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
-// };
-
-
 export const getInitialData = () => {
   return fetch(`${api.url}/ingredients`).then((res) => {
     if (res.ok) {
