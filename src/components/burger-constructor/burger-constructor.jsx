@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { dataType } from "../../utils/types";
 import {
   ConstructorElement,
@@ -9,8 +9,11 @@ import {
 import burgerConstructorStyles from "./burger-constructor.module.css";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
+import { getOrderData } from "../../utils/api";
+import { IngredientsContext } from "../../utils/appcontext";
 
-const BurgerConstructor = ({ data }) => {
+const BurgerConstructor = () => {
+  const { data } = useContext(IngredientsContext);
   const fillings = data.filter((element) => element.type !== "bun");
   const bun = data.find((element) => element.type === "bun");
   const totalCost = fillings.reduce(
@@ -20,11 +23,25 @@ const BurgerConstructor = ({ data }) => {
   const [active, setActive] = useState(false);
   const toggleModal = () => setActive(!active);
 
+  const [orderNumber, setOrderNumber] = useState(0);
+  const makeOrder = async () => {
+    try {
+      const res = await getOrderData(data.map((item) => item._id));
+      const newOrder = await res;
+      setOrderNumber(`${newOrder.order.number}`);
+      toggleModal();
+      console.log(orderNumber);
+    } catch (error) {
+      setOrderNumber(0);
+      console.log(error);
+    }
+  };
+
   return (
     <section className={`${burgerConstructorStyles.section} pt-15`}>
       {active && (
         <Modal title="" onClose={toggleModal}>
-          <OrderDetails />
+          <OrderDetails orderNumber={orderNumber} />
         </Modal>
       )}
       <div className="ml-10 mr-4">
@@ -79,7 +96,9 @@ const BurgerConstructor = ({ data }) => {
           type="primary"
           size="large"
           htmlType="button"
-          onClick={toggleModal}
+          onClick={() => {
+            makeOrder();
+          }}
         >
           Оформить заказ
         </Button>

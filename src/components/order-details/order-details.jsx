@@ -1,13 +1,14 @@
 import orderDetailsStyles from "./order-details.module.css";
 import doneIcon from "../../images/done.svg";
+import PropTypes from "prop-types";
 
-const OrderDetails = () => {
+const OrderDetails = ({ orderNumber }) => {
   return (
     <div className={`${orderDetailsStyles.container} pl-25 pr-25`}>
       <h3
         className={`${orderDetailsStyles.title} text text_type_digits-large pt-20 pb-8`}
       >
-        034536
+        {orderNumber}
       </h3>
       <p
         className={`${orderDetailsStyles.text} text text_type_main-medium pb-15`}
@@ -31,6 +32,10 @@ const OrderDetails = () => {
       </p>
     </div>
   );
+};
+
+OrderDetails.propTypes = {
+  orderID: PropTypes.number,
 };
 
 export default OrderDetails;

@@ -1,10 +1,12 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import { dataType } from "../../utils/types";
 import burgerIngredientsStyles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import IngredientCategory from "../ingredient-category/ingredient-category";
+import { IngredientsContext } from "../../utils/appcontext";
 
-const BurgerIngredients = ({ data }) => {
+const BurgerIngredients = () => {
+  const { data } = useContext(IngredientsContext);
   const [current, setCurrent] = useState("bun");
   const bunRef = useRef();
   const sauceRef = useRef();
@@ -63,48 +65,6 @@ const BurgerIngredients = ({ data }) => {
           id="main"
         />
       </ul>
-
-      {/* <div className={`${burgerIngredientsStyles.ingredients}`}>
-        <div className="mt-10" id="bun">
-          <h2 className="text text_type_main-medium">Булки</h2>
-          <ul className={`${burgerIngredientsStyles.kind} mt-6 ml-4`}>
-            {data.map(
-              (item) =>
-                item.type === "bun" && (
-                  <li key={item._id}>
-                    <IngredientCard ingredient={item} />
-                  </li>
-                )
-            )}
-          </ul>
-        </div>
-        <div className="mt-10" id="sauce">
-          <h2 className="text text_type_main-medium">Соусы</h2>
-          <ul className={`${burgerIngredientsStyles.kind} mt-6 ml-4`}>
-            {data.map(
-              (item) =>
-                item.type === "sauce" && (
-                  <li key={item._id}>
-                    <IngredientCard ingredient={item} />
-                  </li>
-                )
-            )}
-          </ul>
-        </div>
-        <div className="mt-10" id="main">
-          <h2 className="text text_type_main-medium">Начинки</h2>
-          <ul className={`${burgerIngredientsStyles.kind} mt-6 ml-4`}>
-            {data.map(
-              (item) =>
-                item.type === "main" && (
-                  <li key={item._id}>
-                    <IngredientCard ingredient={item} />
-                  </li>
-                )
-            )}
-          </ul>
-        </div>
-      </div>*/}
     </section>
   );
 };
