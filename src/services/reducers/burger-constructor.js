@@ -7,7 +7,7 @@ import {
 
   const initialState = {
     bun: null,
-    ingredients: [],
+    fillings: [],
   };
 
   export const burgerConstructorReducer = (state = initialState, action) => {
@@ -15,7 +15,7 @@ import {
       case BURGER_CONSTRUCTOR_DELETE_ITEM: {
         return {
           ...state,
-          ingredients: [...state.ingredients].filter(
+          fillings: [...state.fillings].filter(
             (item) => {
               return item.id !== action.id;
             }
@@ -31,13 +31,13 @@ import {
       case BURGER_CONSTRUCTOR_ADD_ITEM: {
         return {
           ...state,
-          ingredients: [...state.ingredients, action.data],
+          fillings: [...state.fillings, action.data],
         };
       }
       case BURGER_CONSTRUCTOR_RESET_ITEM: {
         return {
           ...state,
-          ingredients: [],
+          fillings: [],
           bun: [],
         };
       }
