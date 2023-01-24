@@ -3,6 +3,7 @@ import {
     BURGER_CONSTRUCTOR_ADD_ITEM,
     BURGER_CONSTRUCTOR_DELETE_ITEM,
     BURGER_CONSTRUCTOR_RESET_ITEM,
+    BURGER_CONSTRUCTOR_MOVE_ITEM
   } from '../actions/burger-constructor'
 
   const initialState = {
@@ -39,6 +40,19 @@ import {
           ...state,
           fillings: [],
           bun: [],
+        };
+      }
+      case BURGER_CONSTRUCTOR_MOVE_ITEM: {
+        const dragConstructor = [...state.fillings];
+        dragConstructor.splice(
+          action.data.dragIndex,
+          0,
+          dragConstructor.splice(action.data.hoverIndex, 1)[0]
+        );
+
+        return {
+          ...state,
+          ingredients: dragConstructor
         };
       }
 

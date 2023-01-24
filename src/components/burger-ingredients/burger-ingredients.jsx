@@ -1,19 +1,40 @@
-import { useState, useRef} from "react";
+import { useState, useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 import burgerIngredientsStyles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import IngredientCategory from "../ingredient-category/ingredient-category";
 
-
 const BurgerIngredients = () => {
-
   const [current, setCurrent] = useState("bun");
-  const bunRef = useRef();
-  const sauceRef = useRef();
-  const mainRef = useRef();
-  const clickOnTab = (e, ref) => {
-    setCurrent(e);
-    ref.current.scrollIntoView({ behavior: "smooth" });
+  const [bunRef, bunInView] = useInView({ threshold: 0.1 });
+  const [sauceRef, sauceInView] = useInView({ threshold: 0.1 });
+  const [mainRef, mainInView] = useInView({ threshold: 0.1 });
+
+  const clickOnTab = (type) => {
+    setCurrent(type);
+    const section = document.getElementById(type);
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+
+  const handleIngredientScroll = () => {
+    switch (true) {
+      case bunInView:
+        setCurrent("bun");
+        break;
+      case sauceInView:
+        setCurrent("sauce");
+        break;
+      case mainInView:
+        setCurrent("main");
+        break;
+      default:
+        break;
+    }
+  };
+
+  useEffect(() => {
+    handleIngredientScroll();
+  }, [bunInView, sauceInView, mainInView]);
 
   return (
     <section className={burgerIngredientsStyles.section}>
@@ -22,32 +43,27 @@ const BurgerIngredients = () => {
         <Tab
           value="bun"
           active={current === "bun"}
-          onClick={(e) => clickOnTab(e, bunRef)}
+          onClick={() => clickOnTab("bun")}
         >
           Булки
         </Tab>
         <Tab
           value="sauce"
           active={current === "sauce"}
-          onClick={(e) => clickOnTab(e, sauceRef)}
+          onClick={() => clickOnTab("sauce")}
         >
           Соусы
         </Tab>
         <Tab
           value="main"
           active={current === "main"}
-          onClick={(e) => clickOnTab(e, mainRef)}
+          onClick={() => clickOnTab("main")}
         >
           Начинки
         </Tab>
       </div>
       <ul className={`${burgerIngredientsStyles.ingredients} mt-10 `}>
-        <IngredientCategory
-          type="bun"
-          tabRef={bunRef}
-          name="Булки"
-          id="bun"
-        />
+        <IngredientCategory type="bun" tabRef={bunRef} name="Булки" id="bun" />
         <IngredientCategory
           type="sauce"
           tabRef={sauceRef}

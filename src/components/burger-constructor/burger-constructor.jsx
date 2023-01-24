@@ -1,30 +1,27 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useDrop } from "react-dnd";
 import {
   ConstructorElement,
   CurrencyIcon,
   Button,
-  DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerConstructorStyles from "./burger-constructor.module.css";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-import { getOrderData } from "../../utils/api";
+import { getOrderDetails } from "../../services/actions/order-details.js";
 import {
   BURGER_CONSTRUCTOR_ADD_BUN,
   BURGER_CONSTRUCTOR_ADD_ITEM,
 } from "../../services/actions/burger-constructor";
-import { useDrop } from "react-dnd";
+import ConstructorItems from "../burger-constructor-items/burger-constructor-items";
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
   const { bun, fillings } = useSelector((store) => store.burgerConstructor);
   const [totalCost, setTotalCost] = useState(0);
 
-  const itemsData = useMemo(
-    () => fillings.map((item) => item._id),
-    [fillings]
-  );
+  const itemsData = useMemo(() => fillings.map((item) => item._id), [fillings]);
 
   const filling = useMemo(
     () => fillings.filter((item) => item.type !== "bun"),
@@ -43,11 +40,12 @@ const BurgerConstructor = () => {
   const toggleModal = () => setModalActive(!modalActive);
 
   const orderDetails = (productsid) => {
-    dispatch(getOrderData(productsid));
+    console.log(productsid);
+    dispatch(getOrderDetails(productsid));
   };
 
   const [, dropTarget] = useDrop({
-    accept: "ingredients",
+    accept: "fillings",
     drop(item) {
       if (item.ingredient.type === "bun") {
         dispatch({
@@ -70,7 +68,10 @@ const BurgerConstructor = () => {
           <OrderDetails />
         </Modal>
       )}
-      <div className={burgerConstructorStyles.preparationContainer} ref={dropTarget}>
+      <div
+        className={burgerConstructorStyles.preparationContainer}
+        ref={dropTarget}
+      >
         {bun || fillings.length > 0 ? (
           <div className={burgerConstructorStyles.preparationContainer}>
             {bun && (
@@ -85,25 +86,19 @@ const BurgerConstructor = () => {
               </div>
             )}
             <ul className={`${burgerConstructorStyles.fillingList}`}>
-              {fillings.map((element) => {
-                if (element.type !== "bun") {
+              {fillings.length > 0 ? (
+                fillings.map((item, index) => {
                   return (
-                    <li
-                      className={`${burgerConstructorStyles.fillingelement} mb-4 ml-4`}
-                      key={element._id}
-                    >
-                      <DragIcon type="primary" />
-                      <ConstructorElement
-                        text={element.name}
-                        price={element.price}
-                        thumbnail={element.image}
-                      />
-                    </li>
+                    <ConstructorItems index={index} key={item.id} item={item} />
                   );
-                } else {
-                  return null;
-                }
-              })}
+                })
+              ) : (
+                <div
+                  className={`${burgerConstructorStyles.emptyPreparationIngredients} text text_type_main-medium text_color_inactive ml-4`}
+                >
+                  Перетащите сюда начинку
+                </div>
+              )}
             </ul>
             {bun && (
               <div className="ml-8">
@@ -125,28 +120,34 @@ const BurgerConstructor = () => {
           </div>
         )}
       </div>
-
-      <div className={`${burgerConstructorStyles.sum} mt-10`}>
-        <div className={`${burgerConstructorStyles.costContainer} mr-10`}>
-          <p
-            className={`${burgerConstructorStyles.cost} text text_type_digits-medium`}
-          >
-            {totalCost}
-          </p>
-          <CurrencyIcon type="primary" />
+      {(bun || fillings.length > 0) && (
+        <div className={`${burgerConstructorStyles.sum} mt-10`}>
+          <div className={`${burgerConstructorStyles.costContainer} mr-10`}>
+            <p
+              className={`${burgerConstructorStyles.cost} text text_type_digits-medium`}
+            >
+              {totalCost}
+            </p>
+            <CurrencyIcon type="primary" />
+          </div>
+          {fillings.length === 0 || bun === null ? (
+            <Button type="primary" size="large" disabled>
+              Оформить заказ
+            </Button>
+          ) : (
+            <Button
+              type="primary"
+              size="large"
+              onClick={() => {
+                orderDetails(itemsData);
+                toggleModal();
+              }}
+            >
+              Оформить заказ
+            </Button>
+          )}
         </div>
-        <Button
-          type="primary"
-          size="large"
-          htmlType="button"
-          onClick={() => {
-            orderDetails(itemsData);
-            toggleModal();
-          }}
-        >
-          Оформить заказ
-        </Button>
-      </div>
+      )}
     </section>
   );
 };
