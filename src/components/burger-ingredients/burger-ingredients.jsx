@@ -1,12 +1,11 @@
-import { useState, useRef, useContext } from "react";
-import { dataType } from "../../utils/types";
+import { useState, useRef} from "react";
 import burgerIngredientsStyles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import IngredientCategory from "../ingredient-category/ingredient-category";
-import { IngredientsContext } from "../../utils/appcontext";
+
 
 const BurgerIngredients = () => {
-  const { data } = useContext(IngredientsContext);
+
   const [current, setCurrent] = useState("bun");
   const bunRef = useRef();
   const sauceRef = useRef();
@@ -44,21 +43,18 @@ const BurgerIngredients = () => {
       </div>
       <ul className={`${burgerIngredientsStyles.ingredients} mt-10 `}>
         <IngredientCategory
-          data={data}
           type="bun"
           tabRef={bunRef}
           name="Булки"
           id="bun"
         />
         <IngredientCategory
-          data={data}
           type="sauce"
           tabRef={sauceRef}
           name="Соусы"
           id="sauce"
         />
         <IngredientCategory
-          data={data}
           type="main"
           tabRef={mainRef}
           name="Начинки"
@@ -68,7 +64,5 @@ const BurgerIngredients = () => {
     </section>
   );
 };
-
-BurgerIngredients.propTypes = dataType;
 
 export default BurgerIngredients;

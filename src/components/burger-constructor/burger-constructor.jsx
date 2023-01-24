@@ -1,5 +1,5 @@
-import { useState, useContext } from "react";
-import { dataType } from "../../utils/types";
+import { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   ConstructorElement,
   CurrencyIcon,
@@ -10,38 +10,58 @@ import burgerConstructorStyles from "./burger-constructor.module.css";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { getOrderData } from "../../utils/api";
-import { IngredientsContext } from "../../utils/appcontext";
+// import {
+//   BURGER_CONSTRUCTOR_ADD_BUN,
+//   BURGER_CONSTRUCTOR_ADD_ITEM
+// } from "../../services/actions/burger-constructor";
 
 const BurgerConstructor = () => {
-  const { data } = useContext(IngredientsContext);
-  const fillings = data.filter((element) => element.type !== "bun");
-  const bun = data.find((element) => element.type === "bun");
-  const totalCost = fillings.reduce(
-    (total, current) => total + current.price,
-    bun.price * 2
-  );
-  const [active, setActive] = useState(false);
-  const toggleModal = () => setActive(!active);
+  const dispatch = useDispatch();
+  const { bun, fillings } = useSelector((store) => store.burgerConstructor);
+  // const fillings = data.filter((element) => element.type !== "bun");
+  // const bun = data.find((element) => element.type === "bun");
+  const [totalCost, setTotalCost] = useState(0);
 
-  const [orderNumber, setOrderNumber] = useState(0);
-  const makeOrder = async () => {
-    try {
-      const res = await getOrderData(data.map((item) => item._id));
-      const newOrder = await res;
-      setOrderNumber(`${newOrder.order.number}`);
-      toggleModal();
-      console.log(orderNumber);
-    } catch (error) {
-      setOrderNumber(0);
-      console.log(error);
-    }
+  const itemsData = useMemo(() => fillings.map((item) => item._id), [fillings]);
+
+  const filling = useMemo(
+    () => fillings.filter((item) => item.type !== "bun"),
+    [fillings]
+  );
+
+  useEffect(() => {
+    const totalCost = filling.reduce(
+      (current, total) => current + total.price,
+      bun === null ? 0 : bun.price * 2
+    );
+    setTotalCost(totalCost);
+  }, [bun, filling]);
+
+  const [modalActive, setModalActive] = useState(false);
+  const toggleModal = () => setModalActive(!modalActive);
+
+  const orderDetails = (productsid) => {
+    dispatch(getOrderData(productsid));
   };
+
+  //   const makeOrder = async () => {
+  //   try {
+  //     const res = await getOrderData(data.map((item) => item._id));
+  //     const newOrder = await res;
+  //     setOrderNumber(`${newOrder.order.number}`);
+  //     toggleModal();
+  //     console.log(orderNumber);
+  //   } catch (error) {
+  //     setOrderNumber(0);
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <section className={`${burgerConstructorStyles.section} pt-15`}>
-      {active && (
+      {modalActive && (
         <Modal title="" onClose={toggleModal}>
-          <OrderDetails orderNumber={orderNumber} />
+          <OrderDetails />
         </Modal>
       )}
       <div className="ml-10 mr-4">
@@ -54,7 +74,7 @@ const BurgerConstructor = () => {
         />
       </div>
       <ul className={`${burgerConstructorStyles.fillingList}`}>
-        {data.map((element) => {
+        {fillings.map((element) => {
           if (element.type !== "bun") {
             return (
               <li
@@ -97,7 +117,8 @@ const BurgerConstructor = () => {
           size="large"
           htmlType="button"
           onClick={() => {
-            makeOrder();
+            orderDetails(itemsData);
+            toggleModal();
           }}
         >
           Оформить заказ
@@ -107,6 +128,5 @@ const BurgerConstructor = () => {
   );
 };
 
-BurgerConstructor.propTypes = dataType;
 
 export default BurgerConstructor;
