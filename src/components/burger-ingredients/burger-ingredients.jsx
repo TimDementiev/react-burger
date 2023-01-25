@@ -16,23 +16,22 @@ const BurgerIngredients = () => {
     section.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const handleIngredientScroll = () => {
-    switch (true) {
-      case bunInView:
-        setCurrent("bun");
-        break;
-      case sauceInView:
-        setCurrent("sauce");
-        break;
-      case mainInView:
-        setCurrent("main");
-        break;
-      default:
-        break;
-    }
-  };
-
   useEffect(() => {
+    const handleIngredientScroll = () => {
+      switch (true) {
+        case bunInView:
+          setCurrent("bun");
+          break;
+        case sauceInView:
+          setCurrent("sauce");
+          break;
+        case mainInView:
+          setCurrent("main");
+          break;
+        default:
+          break;
+      }
+    };
     handleIngredientScroll();
   }, [bunInView, sauceInView, mainInView]);
 

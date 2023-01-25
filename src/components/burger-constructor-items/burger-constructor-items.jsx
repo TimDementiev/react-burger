@@ -16,8 +16,6 @@ const ConstructorItems = ({ index, item }) => {
   const { image, id, price, name } = item;
   const ref = useRef(null);
   const dispatch = useDispatch();
-  // console.log (index, item)
-  // console.log (image, id, price, name)
 
   const onDelete = (id) => {
     dispatch({

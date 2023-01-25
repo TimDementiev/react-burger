@@ -52,7 +52,7 @@ import {
 
         return {
           ...state,
-          ingredients: dragConstructor
+          fillings: dragConstructor
         };
       }
 

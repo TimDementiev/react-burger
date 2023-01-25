@@ -40,7 +40,6 @@ const BurgerConstructor = () => {
   const toggleModal = () => setModalActive(!modalActive);
 
   const orderDetails = (productsid) => {
-    console.log(productsid);
     dispatch(getOrderDetails(productsid));
   };
 
@@ -131,7 +130,7 @@ const BurgerConstructor = () => {
             <CurrencyIcon type="primary" />
           </div>
           {fillings.length === 0 || bun === null ? (
-            <Button type="primary" size="large" disabled>
+            <Button htmlType="button" type="primary" size="large" disabled>
               Оформить заказ
             </Button>
           ) : (
@@ -142,6 +141,7 @@ const BurgerConstructor = () => {
                 orderDetails(itemsData);
                 toggleModal();
               }}
+              htmlType="button"
             >
               Оформить заказ
             </Button>
