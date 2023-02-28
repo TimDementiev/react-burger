@@ -8,6 +8,7 @@ import { modalType } from "../../utils/types";
 const modalContainer = document.getElementById("modal");
 
 const Modal = ({ title, onClose, children }) => {
+
   useEffect(() => {
     const handleEscKeydown = (e) => {
       if (e.key === "Escape") {

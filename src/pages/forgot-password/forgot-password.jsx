@@ -4,12 +4,12 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { useSelector, useDispatch } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useForm } from "../../hooks/use-form";
 import { recoveryPassword } from "../../services/actions/auth";
 import styles from "./forgot-password.module.css";
 
-export const ForgotPassword = () => {
+export const ForgotPasswordPage = () => {
   const { values, handleValues } = useForm({ email: "" });
   const dispatch = useDispatch();
 
@@ -39,7 +39,7 @@ export const ForgotPassword = () => {
           />
         </div>
         <Button disabled={!values.email} type="primary" size="medium">
-          {recoveryPasswordSuccess ? <Redirect to="/reset-password" /> : ""}
+          {recoveryPasswordSuccess ? <Navigate to="/reset-password" /> : ""}
           Восстановить
         </Button>
       </form>

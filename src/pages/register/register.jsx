@@ -5,9 +5,9 @@ import {
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./register.module.css";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { registrationUser } from "../../services/actions/auth";
+import { registrateUser } from "../../services/actions/auth";
 import { useForm } from "../../hooks/use-form";
 
 export const RegisterPage = () => {
@@ -20,12 +20,12 @@ export const RegisterPage = () => {
   const onFormSubmit = (e) => {
     e.preventDefault();
     dispatch(
-      registrationUser(values.name, values.email, values.password)
+      registrateUser(values.name, values.email, values.password)
     );
   }
 
   if (user && isAuth) {
-    return <Redirect to={"/"} />;
+    return <Navigate to={"/"} />;
   }
 
   return (

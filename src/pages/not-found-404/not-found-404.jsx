@@ -10,7 +10,7 @@ export const NotFound404Page = () => {
         to="/"
         className={`${styles.link} pt-15 text text_type_main-medium text_color_inactive`}
       >
-        Перейти на главную страницу
+        На главную страницу
       </Link>
     </div>
   );

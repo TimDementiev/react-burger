@@ -4,7 +4,7 @@ import {
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, Redirect, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import { useForm } from "../../hooks/use-form";
 import { resetPassword } from "../../services/actions/auth";
 import styles from "./reset-password.module.css";
@@ -25,7 +25,7 @@ export const ResetPasswordPage = () => {
   }
 
   if (!recoveryPasswordSuccess) {
-    return <Redirect to={{ pathname: "/forgot-password" }} />;
+    return <Navigate to={{ pathname: "/forgot-password" }} />;
   }
 
   return (
@@ -61,7 +61,7 @@ export const ResetPasswordPage = () => {
             size="medium"
           >
             {!!resetPasswordSuccess ? (
-              <Redirect to={location.state?.from || "/profile"} />
+              <Navigate to={location.state?.from || "/profile"} />
             ) : (
               ""
             )}
