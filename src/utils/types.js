@@ -26,12 +26,3 @@ export const ingredientCategoryType = {
   name: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
 };
-
-export const ingredientDetailsType = {
-  name: PropTypes.string.isRequired,
-  proteins: PropTypes.number.isRequired,
-  fat: PropTypes.number.isRequired,
-  carbohydrates: PropTypes.number.isRequired,
-  calories: PropTypes.number.isRequired,
-  image_large: PropTypes.string.isRequired,
-};

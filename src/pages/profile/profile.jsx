@@ -49,7 +49,6 @@ export const ProfilePage = () => {
           <li className={`${styles.item}`}>
             <NavLink
               to="/profile"
-              // exact
               className={({ isActive }) =>
                 isActive
                   ? `${styles.linkActive} text_type_main-medium text`
@@ -62,7 +61,6 @@ export const ProfilePage = () => {
           <li className={`${styles.item}`}>
             <NavLink
               to="/profile/orders"
-              // exact
               className={({ isActive }) =>
                 isActive
                   ? `${styles.linkActive} text_type_main-medium text`
@@ -75,7 +73,6 @@ export const ProfilePage = () => {
           <li className={`${styles.item}`}>
             <NavLink
               to="/login"
-              // exact
               className={({ isActive }) =>
                 isActive
                   ? `${styles.linkActive} text_type_main-medium text`
@@ -93,8 +90,6 @@ export const ProfilePage = () => {
           В этом разделе вы можете изменить свои персональные данные
         </p>
       </nav>
-      {/* <Routes>
-        <Route path="/profile" exact> */}
       <form className={styles.form} onSubmit={submit}>
         <div className="pb-6">
           <Input
@@ -154,8 +149,6 @@ export const ProfilePage = () => {
           </Button>
         </div>
       </form>
-      {/* </Route>
-      </Routes> */}
     </div>
   );
 };

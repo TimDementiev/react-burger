@@ -73,22 +73,12 @@ export function authorization(email, password, forwarding) {
     });
     authorizationRequest(email, password)
       .then((res) => {
-        // const accessToken = res.accessToken.split("Bearer ")[1];
-        // const refreshToken = res.refreshToken;
-        // localStorage.setItem("refreshToken", res.refreshToken);
-        // return res;
         setCookie("token", res.accessToken.split("Bearer ")[1]);
         setCookie("refreshToken", res.refreshToken);
         dispatch({ type: LOGIN_SUCCESS, payload: res.success });
         dispatch({ type: SET_USER_DATA, payload: res.user });
         forwarding();
       })
-      // .then((res) => {
-      //   dispatch({
-      //     type: LOGIN_SUCCESS,
-      //     user: res.user,
-      //   });
-      // })
       .catch((err) => {
         dispatch({
           type: LOGIN_FAILED,
@@ -155,8 +145,6 @@ export function updateToken(refreshToken) {
         setCookie("token", res.accessToken.split("Bearer ")[1]);
         setCookie("refreshToken", res.refreshToken);
         dispatch({ type: UPDATE_TOKEN_SUCCESS, payload: res.success });
-        // localStorage.setItem("refreshToken", refreshToken);
-        // const refreshToken = res.refreshToken;
       })
       .catch(() => {
         dispatch({
@@ -239,7 +227,6 @@ export function updateUserData(email, name, password, accessToken) {
         dispatch({
           type: UPDATE_USER_SUCCESS,
           payload: res.success,
-          // user: res.user,
         });
       })
       .catch((err) => {
@@ -247,9 +234,6 @@ export function updateUserData(email, name, password, accessToken) {
           dispatch(updateToken(getCookie("refreshToken")));
           dispatch({ type: UPDATE_USER_FAILED });
         }
-        // dispatch({
-        //   type: UPDATE_USER_FAILED,
-        // });
       });
   };
 }

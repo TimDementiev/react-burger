@@ -12,9 +12,9 @@ import {
   ForgotPasswordPage,
   ResetPasswordPage,
   ProfilePage,
+  IngredientPage,
   NotFound404Page,
 } from "../../pages/index";
-// import { checkUserAuth, getUserData } from "../../services/actions/auth";
 import { getUserData } from "../../services/actions/auth";
 import { getCookie } from "../../utils/cookie";
 import Modal from "../modal/modal";
@@ -26,14 +26,14 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const accessToken = getCookie("token");
-  const background = location.state?.background;
   const dataRequest = useSelector(
     (store) => store.burgerIngredients.dataRequest
   );
+  const background = location.state && location.state.previousLocation;
 
   useEffect(() => {
     dispatch(getBurgerIngredients());
-    }, [dispatch]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (accessToken) {
@@ -42,8 +42,9 @@ function App() {
   }, [dispatch, accessToken]);
 
   const handleCloseModal = () => {
-    navigate.goBack();
+    navigate(-1);
   };
+
 
   return (
     <div className={appStyles.app}>
@@ -70,15 +71,24 @@ function App() {
           path="/profile"
           element={<ProtectedRoute element={<ProfilePage />} />}
         />
+        <Route
+          path="/ingredients/:id"
+          element={!dataRequest ? "Loading" : <IngredientPage />}
+        />
         <Route path="*" element={<NotFound404Page />} />
       </Routes>
 
       {background && (
-        <Route path="/ingredients/:id">
-          <Modal onClose={handleCloseModal} title="Детали ингредиента">
-            {!dataRequest ? "Loading" : <IngredientDetails />}
-          </Modal>
-        </Route>
+        <Routes>
+          <Route
+            path="/ingredients/:id"
+            element={
+              <Modal onClose={handleCloseModal} title="Детали ингредиента" >
+                {!dataRequest ? "Loading" : <IngredientDetails />}
+              </Modal>
+            }
+          />
+        </Routes>
       )}
     </div>
   );

@@ -23,7 +23,6 @@ const BurgerConstructor = () => {
   const { bun, fillings } = useSelector((store) => store.burgerConstructor);
   const [totalCost, setTotalCost] = useState(0);
   const [modalActive, setModalActive] = useState(false);
-  // const isAuthSuccess = useSelector((store) => store.user.isAuthSuccess);
   const user = useSelector((store) => store.user.user);
 
   const itemsData = useMemo(() => fillings.map((item) => item._id), [fillings]);

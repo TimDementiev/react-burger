@@ -1,0 +1,32 @@
+.container {
+    max-width: 520px;
+    margin: 208px auto 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    align-self: center;
+}
+
+.table {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.headers {
+    display: grid;
+    grid-template-columns: 120px 112px 112px 112px;
+    gap: 20px;
+}
+
+.data {
+    display: grid;
+    grid-template-columns: 120px 112px 112px 112px;
+    gap: 20px;
+    text-align: center;
+}

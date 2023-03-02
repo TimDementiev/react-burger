@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useNavigate } from "react-router-dom";
+
 import styles from "./modal.module.css";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -8,6 +10,7 @@ import { modalType } from "../../utils/types";
 const modalContainer = document.getElementById("modal");
 
 const Modal = ({ title, onClose, children }) => {
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleEscKeydown = (e) => {
@@ -19,7 +22,7 @@ const Modal = ({ title, onClose, children }) => {
     return () => {
       document.removeEventListener("keydown", handleEscKeydown);
     };
-  }, [onClose]);
+  }, [onClose, navigate]);
 
   return createPortal(
     <>
