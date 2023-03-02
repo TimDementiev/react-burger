@@ -1,8 +1,11 @@
 import orderDetailsStyles from "./order-details.module.css";
 import doneIcon from "../../images/done.svg";
 import PropTypes from "prop-types";
+import { useSelector } from 'react-redux';
 
-const OrderDetails = ({ orderNumber }) => {
+const OrderDetails = () => {
+  const orderNumber = useSelector((store) => store.order.number);
+
   return (
     <div className={`${orderDetailsStyles.container} pl-25 pr-25`}>
       <h3
