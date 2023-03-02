@@ -1,11 +1,19 @@
-import { getCookie, setCookie } from "../utils/cookie";
+import { getCookie } from "../utils/cookie";
 
 export const api = {
   url: "https://norma.nomoreparties.space/api",
   headers: {
-    "Content-Type": "aplication.json",
+    "Content-Type": "aplication/json",
   },
 };
+
+export const checkResponse = (res) => {
+  return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
+};
+
+function request(url, options) {
+  return fetch(url, options).then(checkResponse);
+}
 
 export const getInitialData = () => {
   return fetch(`${api.url}/ingredients`).then((res) => {
@@ -29,14 +37,6 @@ export const getOrderData = (ingredientsData) => {
   });
 };
 
-function request(url, options) {
-  return fetch(url, options).then(checkResponse);
-}
-
-export const checkResponse = (res) => {
-  return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
-};
-
 export const getIngredients = async () => {
   return await request(`${api.url}/ingredients`, {
     method: "GET",
@@ -54,21 +54,39 @@ export const apiPostOrder = async (orderData) => {
   });
 };
 
-export const authorizationRequest = async (email, password) => {
-  return await request(`${api.url}/auth/login`, {
+//Авторизация пользователя
+export const authorizationRequest = (email, password) =>
+  request(`${api.url}/auth/login`, {
     method: "POST",
-    headers: api.headers,
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({
       email: email,
       password: password,
     }),
   });
+
+//Обновление токена
+export const updateTokenRequest = (refreshToken) => {
+  return request(`${api.url}/auth/token`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      token: refreshToken,
+    }),
+  });
 };
 
-export const registrationRequest = async (name, email, password) => {
+//Регистрация пользователя
+export const registrationRequest = async (email, password, name) => {
   return await request(`${api.url}/auth/register`, {
     method: "POST",
-    headers: api.headers,
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({
       email: email,
       password: password,
@@ -77,92 +95,68 @@ export const registrationRequest = async (name, email, password) => {
   });
 };
 
-export const getUserDataRequest = async () => {
-  return await fetchWithRefresh(`${api.url}/auth/user`, {
+//Получение данных пользователя
+export const getUserDataRequest = async (accessToken) => {
+  return await request(`${api.url}/auth/user`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json; charset=utf-8",
-      Authorization: "Bearer " + getCookie("token"),
+      authorization: `Bearer ${accessToken}`,
     },
   });
 };
 
+//Обновление данных пользователя
 export const updateUserDataRequest = async (email, name, password) => {
-  return await fetchWithRefresh(`${api.url}/auth/user`, {
+  return await request(`${api.url}/auth/user`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + getCookie("token"),
     },
     body: JSON.stringify({
-      name: name,
       email: email,
+      name: name,
       password: password,
     }),
   });
 };
 
-export const logoutRequest = async () => {
-  return await fetch(`${api.url}/auth/logout`, {
-    method: "POST",
-    headers: api.headers,
-    body: JSON.stringify({
-      token: localStorage.getItem("refreshToken"),
-    }),
-  });
-};
-
-export const updateTokenRequest = async () => {
-  return await request(`${api.url}/auth/token`, {
+//Выход из профиля
+export const logoutRequest = (refreshToken) => {
+  return request(`${api.url}/auth/logout`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      token: localStorage.getItem("refreshToken"),
+      token: refreshToken,
     }),
   });
 };
 
-export const recoveryPasswordRequest = async (email) => {
-  return await request(`${api.url}/password-reset`, {
+//Восстановление пароля
+export const recoveryPasswordRequest = (email) => {
+  return request(`https://norma.nomoreparties.space/api/password-reset`, {
     method: "POST",
     headers: api.headers,
     body: JSON.stringify({
-      email: email.email,
+      email,
     }),
   });
 };
 
-export const resetPasswordRequest = async (password, token) => {
-  return await request(`${api.url}/password-reset/reset`, {
-    method: "POST",
-    headers: api.headers,
-    body: JSON.stringify(password, token),
-  });
-};
-
-export const fetchWithRefresh = async (url, options) => {
-  try {
-    const res = await fetch(url, options);
-    return await checkResponse(res);
-  } catch (err) {
-    console.log(err)
-    if (err.message === 'jwt expired') {
-      const refreshToken = await updateTokenRequest();
-      const accessToken = refreshToken.accessToken.split("Bearer ")[1];
-
-      if (!refreshToken.success) {
-        Promise.reject(refreshToken);
-      }
-      localStorage.setItem("refreshToken", refreshToken.refreshToken);
-      setCookie("token", accessToken);
-
-      options.headers.Authorization = refreshToken.accessToken;
-      const res = await fetch(url, options);
-      return await checkResponse(res);
-    } else {
-      return Promise.reject(err);
+//Сброс пароля пользователя
+export const setPasswordRequest = (password, code) => {
+  return request(
+    `https://norma.nomoreparties.space/api/password-reset/reset`,
+    {
+      method: "POST",
+      headers: api.headers,
+      body: JSON.stringify({
+        password: password,
+        token: code,
+      }),
     }
-  }
-}
+  ).then((res) => checkResponse(res));
+};

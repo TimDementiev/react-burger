@@ -5,24 +5,36 @@ import {
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./register.module.css";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { registrateUser } from "../../services/actions/auth";
 import { useForm } from "../../hooks/use-form";
 
 export const RegisterPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
   const user = useSelector((store) => store.user.user);
-  const isAuth = useSelector((store) => store.user.isAuth)
+  const isAuth = useSelector((store) => store.user.isAuth);
 
-  const { values, handleValues } = useForm({name: "", email: "", password: ""});
+  const { values, handleValues } = useForm({
+    name: "",
+    email: "",
+    password: "",
+  });
 
   const onFormSubmit = (e) => {
     e.preventDefault();
     dispatch(
-      registrateUser(values.name, values.email, values.password)
+      registrateUser(values.email, values.password, values.name, () =>
+        navigate(
+          location?.state?.previousLocation
+            ? location.state.previousLocation
+            : "/"
+        )
+      )
     );
-  }
+  };
 
   if (user && isAuth) {
     return <Navigate to={"/"} />;
@@ -62,7 +74,7 @@ export const RegisterPage = () => {
             size="default"
           />
         </div>
-        <Button type="primary" size="medium">
+        <Button htmlType="submit" type="primary" size="medium">
           Зарегистрироваться
         </Button>
       </form>

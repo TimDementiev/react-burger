@@ -1,10 +1,6 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import {
-  Routes,
-  Route,
-  useLocation,
-} from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 
 import AppHeader from "../app-header/app-header";
 import appStyles from "./app.module.css";
@@ -18,62 +14,72 @@ import {
   ProfilePage,
   NotFound404Page,
 } from "../../pages/index";
-import { checkUserAuth, getUserData } from "../../services/actions/auth";
+// import { checkUserAuth, getUserData } from "../../services/actions/auth";
+import { getUserData } from "../../services/actions/auth";
 import { getCookie } from "../../utils/cookie";
-
+import Modal from "../modal/modal";
+import IngredientDetails from "../ingredient-details/ingredient-details";
+import { ProtectedRoute } from "../protected-route/protected-route";
+import { UnauthorizedRoute } from "../unauthorized-route/unauthorized-route";
 function App() {
-  const location = useLocation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const accessToken = getCookie("token");
   const background = location.state?.background;
-
+  const dataRequest = useSelector(
+    (store) => store.burgerIngredients.dataRequest
+  );
 
   useEffect(() => {
     dispatch(getBurgerIngredients());
-    dispatch(checkUserAuth());
-  }, [dispatch]);
+    }, [dispatch]);
 
   useEffect(() => {
-    if (getCookie("token")) {
-      dispatch(getUserData());
+    if (accessToken) {
+      dispatch(getUserData(accessToken));
     }
-  }, [dispatch]);
+  }, [dispatch, accessToken]);
+
+  const handleCloseModal = () => {
+    navigate.goBack();
+  };
 
   return (
     <div className={appStyles.app}>
       <AppHeader />
       <Routes location={background || location}>
-        <Route path="/" element={<HomePage />} exact forNonAuthUsers={false} />
+        <Route path="/" element={<HomePage />} />
         <Route
           path="/login"
-          element={<LoginPage />}
-          exact
-          forNonAuthUsers={true}
+          element={<UnauthorizedRoute element={<LoginPage />} />}
         />
         <Route
           path="/register"
-          element={<RegisterPage />}
-          exact
-          forNonAuthUsers={true}
+          element={<UnauthorizedRoute element={<RegisterPage />} />}
         />
         <Route
           path="/forgot-password"
-          element={<ForgotPasswordPage />}
-          exact
-          forNonAuthUsers={true}
+          element={<UnauthorizedRoute element={<ForgotPasswordPage />} />}
         />
         <Route
           path="/reset-password"
-          element={<ResetPasswordPage />}
-          exact
-          forNonAuthUsers={true}
+          element={<UnauthorizedRoute element={<ResetPasswordPage />} />}
         />
         <Route
           path="/profile"
-          element={<ProfilePage />}
-          forNonAuthUsers={false}
+          element={<ProtectedRoute element={<ProfilePage />} />}
         />
         <Route path="*" element={<NotFound404Page />} />
       </Routes>
+
+      {background && (
+        <Route path="/ingredients/:id">
+          <Modal onClose={handleCloseModal} title="Детали ингредиента">
+            {!dataRequest ? "Loading" : <IngredientDetails />}
+          </Modal>
+        </Route>
+      )}
     </div>
   );
 }

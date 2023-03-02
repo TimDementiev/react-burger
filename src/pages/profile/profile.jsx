@@ -3,15 +3,18 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, Route, Routes } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { logout, updateUserData } from "../../services/actions/auth";
-import profileStyle from "./profile.module.css";
+import styles from "./profile.module.css";
 import { useForm } from "../../hooks/use-form";
-
+import { getCookie } from "../../utils/cookie";
 
 export const ProfilePage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector((store) => store.user.user);
+  const accessToken = getCookie("token");
+  const refreshToken = getCookie("refreshToken");
 
   const { values, handleValues, setValues } = useForm({
     name: user.name,
@@ -20,12 +23,14 @@ export const ProfilePage = () => {
   });
 
   function onLogout() {
-    dispatch(logout());
+    dispatch(logout(refreshToken, () => navigate("/", { replace: true })));
   }
 
   function submit(e) {
     e.preventDefault();
-    dispatch(updateUserData(values.email, values.name, values.password));
+    dispatch(
+      updateUserData(values.email, values.name, values.password, accessToken)
+    );
   }
 
   function reset(e) {
@@ -38,35 +43,44 @@ export const ProfilePage = () => {
   }
 
   return (
-    <div className={`${profileStyle.container} pt-30`}>
-      <nav className={`${profileStyle.nav} pr-15`}>
-        <ul className={`${profileStyle.items}`}>
-          <li className={`${profileStyle.item}`}>
+    <div className={`${styles.container} pt-30`}>
+      <nav className={`${styles.nav} pr-15`}>
+        <ul className={`${styles.items}`}>
+          <li className={`${styles.item}`}>
             <NavLink
               to="/profile"
-              exact
-              className={`${profileStyle.link} text_type_main-medium text_color_inactive text`}
-              activeClassName={`${profileStyle.linkActive} text_type_main-medium text`}
+              // exact
+              className={({ isActive }) =>
+                isActive
+                  ? `${styles.linkActive} text_type_main-medium text`
+                  : `${styles.link} text_type_main-medium text_color_inactive text`
+              }
             >
               Профиль
             </NavLink>
           </li>
-          <li className={`${profileStyle.item}`}>
+          <li className={`${styles.item}`}>
             <NavLink
               to="/profile/orders"
-              exact
-              className={`${profileStyle.link} text_type_main-medium text_color_inactive text`}
-              activeClassName={`${profileStyle.linkActive} text_type_main-medium text`}
+              // exact
+              className={({ isActive }) =>
+                isActive
+                  ? `${styles.linkActive} text_type_main-medium text`
+                  : `${styles.link} text_type_main-medium text_color_inactive text`
+              }
             >
               История заказов
             </NavLink>
           </li>
-          <li className={`${profileStyle.item}`}>
+          <li className={`${styles.item}`}>
             <NavLink
               to="/login"
-              exact
-              className={`${profileStyle.link} text_type_main-medium text_color_inactive text`}
-              activeClassName={`${profileStyle.linkActive} text_type_main-medium text`}
+              // exact
+              className={({ isActive }) =>
+                isActive
+                  ? `${styles.linkActive} text_type_main-medium text`
+                  : `${styles.link} text_type_main-medium text_color_inactive text`
+              }
               onClick={onLogout}
             >
               Выход
@@ -74,68 +88,74 @@ export const ProfilePage = () => {
           </li>
         </ul>
         <p
-          className={`${profileStyle.description} pt-20 pb-4 text_type_main-default text_color_inactive text`}
+          className={`${styles.description} pt-20 pb-4 text_type_main-default text_color_inactive text`}
         >
           В этом разделе вы можете изменить свои персональные данные
         </p>
       </nav>
-      <Routes>
-        <Route path="/profile" exact>
-          <form className={profileStyle.form} onSubmit={submit}>
-            <div className="pb-6">
-              <Input
-                type={"text"}
-                placeholder={"Имя"}
-                onChange={handleValues}
-                icon={"EditIcon"}
-                value={values.name}
-                name={"name"}
-                error={false}
-                errorText={"Ошибка"}
-                size={"default"}
-              />
-            </div>
-            <div className="pb-6">
-              <Input
-                type={"email"}
-                placeholder={"Логин"}
-                onChange={handleValues}
-                icon={"EditIcon"}
-                value={values.email}
-                name={"email"}
-                error={false}
-                errorText={"Ошибка"}
-                size={"default"}
-              />
-            </div>
-            <div className="pb-6">
-              <Input
-                type={"password"}
-                placeholder={"Пароль"}
-                onChange={handleValues}
-                icon={"EditIcon"}
-                value={values.password}
-                name={"password"}
-                error={false}
-                errorText={"Ошибка"}
-                size={"default"}
-              />
-            </div>
-            <div className={profileStyle.buttons}>
-              <Button type="secondary" size="medium" onClick={reset}>
-                Oтмена
-              </Button>
-              <Button
-                disabled={!values.email && !values.password && !values.name}
-                type="primary"
-                size="medium"
-              >
-                Сохранить
-              </Button>
-            </div>
-          </form>
-        </Route>
-      </Routes>
+      {/* <Routes>
+        <Route path="/profile" exact> */}
+      <form className={styles.form} onSubmit={submit}>
+        <div className="pb-6">
+          <Input
+            type={"text"}
+            placeholder={"Имя"}
+            onChange={handleValues}
+            icon={"EditIcon"}
+            value={values.name}
+            name={"name"}
+            error={false}
+            errorText={"Ошибка"}
+            size={"default"}
+          />
+        </div>
+        <div className="pb-6">
+          <Input
+            type={"email"}
+            placeholder={"Логин"}
+            onChange={handleValues}
+            icon={"EditIcon"}
+            value={values.email}
+            name={"email"}
+            error={false}
+            errorText={"Ошибка"}
+            size={"default"}
+          />
+        </div>
+        <div className="pb-6">
+          <Input
+            type={"password"}
+            placeholder={"Пароль"}
+            onChange={handleValues}
+            icon={"EditIcon"}
+            value={values.password}
+            name={"password"}
+            error={false}
+            errorText={"Ошибка"}
+            size={"default"}
+          />
+        </div>
+        <div className={styles.buttons}>
+          <Button
+            htmlType="button"
+            type="secondary"
+            size="medium"
+            onClick={reset}
+          >
+            Oтмена
+          </Button>
+          <Button
+            htmlType="submit"
+            disabled={!values.email && !values.password && !values.name}
+            type="primary"
+            size="medium"
+          >
+            Сохранить
+          </Button>
+        </div>
+      </form>
+      {/* </Route>
+      </Routes> */}
     </div>
   );
 };

@@ -1,7 +1,8 @@
 import {
-  GET_USER_REQUEST,
-  GET_USER_SUCCESS,
-  GET_USER_FAILED,
+  SET_USER_DATA,
+  GET_USER_DATA_REQUEST,
+  GET_USER_DATA_SUCCESS,
+  GET_USER_DATA_FAILED,
   UPDATE_USER_REQUEST,
   UPDATE_USER_SUCCESS,
   UPDATE_USER_FAILED,
@@ -17,17 +18,15 @@ import {
   RECOVERY_PASSWORD_REQUEST,
   RECOVERY_PASSWORD_SUCCESS,
   RECOVERY_PASSWORD_FAILED,
-  RESET_PASSWORD_REQUEST,
-  RESET_PASSWORD_SUCCESS,
-  RESET_PASSWORD_FAILED,
+  SET_PASSWORD_REQUEST,
+  SET_PASSWORD_SUCCESS,
+  SET_PASSWORD_FAILED,
   UPDATE_TOKEN_REQUEST,
   UPDATE_TOKEN_SUCCESS,
   UPDATE_TOKEN_FAILED,
   AUTH_CHECKED,
   AUTH_CHECKED_FAILED,
 } from "../actions/auth";
-
-
 
 const initialState = {
   isAuthSuccess: false,
@@ -36,114 +35,133 @@ const initialState = {
     name: "",
     email: "",
     password: "",
-    code: ""
+    code: "",
   },
 
   user: null,
+
   getUserDataRequest: false,
-  getUserDataFaild: false,
+  getUserDataFailed: false,
   getUserDataSuccess: false,
+  getUserDataResponse: null,
+
   updateUserDataRequest: false,
-  updateUserDataFaild: false,
+  updateUserDataFailed: false,
   updateUserDataSuccess: false,
+  updateUserDataResponse: null,
+
   registrationRequest: false,
-  registrateUserFaild: false,
+  registrateUserFailed: false,
   registrateUserSuccess: false,
+  registrateResponse: null,
+
   authorizationRequest: false,
-  authorizationFaild: false,
+  authorizationFailed: false,
   authorizationSuccess: false,
+  authorizationResponse: null,
+
   logoutRequest: false,
-  logoutFaild: false,
+  logoutFailed: false,
   logoutSuccess: false,
+  logoutResponse: null,
+
   recoveryPasswordRequest: false,
-  recoveryPasswordFaild: false,
+  recoveryPasswordFailed: false,
   recoveryPasswordSuccess: false,
-  resetPasswordRequest: false,
-  resetPasswordFaild: false,
-  resetPasswordSuccess: false,
+  recoveryPasswordResponse: null,
+
+  setPasswordRequest: false,
+  setPasswordFailed: false,
+  setPasswordSuccess: false,
+  setPasswordResponse: null,
+
   updateTokenRequest: false,
-  updateTokenFaild: false,
+  updateTokenFailed: false,
   updateTokenSuccess: false,
-}
+  updateTokenResponse: null,
+};
 
 export const authReducer = (state = initialState, action) => {
   switch (action.type) {
+    case SET_USER_DATA: {
+      return {
+        ...state,
+        user: {
+          name: action.payload.name,
+          email: action.payload.email,
+        },
+      };
+    }
+
     case AUTH_CHECKED: {
       return {
         ...state,
 
         isAuthSuccess: true,
-      }
+      };
     }
     case AUTH_CHECKED_FAILED: {
       return {
         ...state,
-
         isAuthSuccess: false,
-      }
+      };
     }
 
     //Получение данных пользователя
-    case GET_USER_REQUEST: {
+    case GET_USER_DATA_REQUEST: {
       return {
         ...state,
-
         getUserDataRequest: true,
-        getUserDataFaild: false,
-      }
+        getUserDataFailed: false,
+      };
     }
 
-    case GET_USER_FAILED: {
+    case GET_USER_DATA_FAILED: {
       return {
         ...state,
-
         getUserDataRequest: false,
-        getUserDataFaild: true,
+        getUserDataFailed: true,
         isAuthSuccess: false,
-      }
+      };
     }
 
-    case GET_USER_SUCCESS: {
+    case GET_USER_DATA_SUCCESS: {
       return {
         ...state,
-
-        getUserDataFaild: false,
+        getUserDataFailed: false,
         getUserDataSuccess: true,
-
-        user: action.user,
-      }
+        getUserDataResponse: action.payload,
+        // user: action.user,
+      };
     }
 
     //Обновление данных пользователя
     case UPDATE_USER_REQUEST: {
       return {
         ...state,
-
         updateUserDataRequest: true,
-        updateUserDataFaild: false,
+        updateUserDataFailed: false,
         updateUserDataSuccess: false,
-      }
+      };
     }
 
     case UPDATE_USER_FAILED: {
       return {
         ...state,
-
         updateUserDataRequest: false,
         updateUserDataSuccess: false,
-        updateUserDataFaild: true,
-      }
+        updateUserDataFailed: true,
+      };
     }
 
     case UPDATE_USER_SUCCESS: {
       return {
         ...state,
-
         updateUserDataRequest: false,
         updateUserDataSuccess: true,
-        updateUserDataFaild: false,
+        updateUserDataFailed: false,
 
-        user: action.user,
+        // user: action.user,
 
         form: {
           ...state.form,
@@ -151,7 +169,7 @@ export const authReducer = (state = initialState, action) => {
           password: "",
           name: "",
         },
-      }
+      };
     }
 
     //Регистрация пользователя
@@ -160,9 +178,9 @@ export const authReducer = (state = initialState, action) => {
         ...state,
 
         registrationRequest: true,
-        registrateUserFaild: false,
+        registrateUserFailed: false,
         registrateUserSuccess: false,
-      }
+      };
     }
 
     case REGISTRATION_FORM_FAILED: {
@@ -170,71 +188,63 @@ export const authReducer = (state = initialState, action) => {
         ...state,
 
         registrationRequest: false,
-        registrateUserFaild: true,
+        registrateUserFailed: true,
         registrateUserSuccess: false,
-      }
+      };
     }
 
     case REGISTRATION_FORM_SUCCESS: {
       return {
         ...state,
-
-        user: action.user,
-
-        form: {
-          ...state.form,
-          email: "",
-          password: "",
-          name: "",
-        },
-
+        // user: action.user,
+        // form: {
+        //   ...state.form,
+        //   email: "",
+        //   password: "",
+        //   name: "",
+        // },
         registrationRequest: false,
-        registrateUserFaild: false,
+        registrateUserFailed: false,
         registrateUserSuccess: true,
-      }
+        registrateResponse: action.payload,
+      };
     }
 
     case LOGIN_REQUEST: {
       return {
         ...state,
         authorizationRequest: true,
-        authorizationFaild: false,
+        authorizationFailed: false,
         authorizationSuccess: false,
-      }
+      };
     }
 
     case LOGIN_FAILED: {
       return {
         ...state,
         authorizationRequest: false,
-        authorizationFaild: true,
+        authorizationFailed: true,
         authorizationSuccess: false,
-
-        isAuthSuccess: false,
-      }
+        // isAuthSuccess: false,
+      };
     }
 
     case LOGIN_SUCCESS: {
-
       return {
         ...state,
-
-        user: action.user,
-
-        form: {
-          ...state.form,
-          email: '',
-          name: '',
-          password: '',
-        },
-
-
-        isAuthSuccess: true,
-
+        // user: action.user,
+        // form: {
+        //   ...state.form,
+        //   email: "",
+        //   name: "",
+        //   password: "",
+        // },
+        // isAuthSuccess: true,
         authorizationRequest: false,
-        authorizationFaild: false,
+        authorizationFailed: false,
         authorizationSuccess: true,
-      }
+        authorizationResponse: action.payload,
+      };
     }
 
     //Выход из системы
@@ -242,38 +252,36 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         logoutRequest: true,
-        logoutFaild: false,
+        logoutFailed: false,
         logoutSuccess: false,
-      }
+      };
     }
 
     case LOGOUT_FAILED: {
       return {
         ...state,
         logoutRequest: false,
-        logoutFaild: true,
+        logoutFailed: true,
         logoutSuccess: false,
-      }
+      };
     }
 
     case LOGOUT_SUCCESS: {
       return {
         ...state,
         user: null,
-
-        form: {
-          ...state.form,
-          email: '',
-          name: '',
-          password: '',
-        },
-
+        // form: {
+        //   ...state.form,
+        //   email: "",
+        //   name: "",
+        //   password: "",
+        // },
         logoutRequest: false,
-        logoutFaild: false,
+        logoutFailed: false,
         logoutSuccess: true,
-
-        isAuthSuccess: false,
-      }
+        logoutResponse: action.payload,
+        // isAuthSuccess: false,
+      };
     }
 
     //Восстановление пароля
@@ -281,67 +289,62 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         recoveryPasswordRequest: true,
-        recoveryPasswordFaild: false,
+        recoveryPasswordFailed: false,
         recoveryPasswordSuccess: false,
-      }
+      };
     }
 
     case RECOVERY_PASSWORD_FAILED: {
       return {
         ...state,
         recoveryPasswordRequest: false,
-        recoveryPasswordFaild: true,
+        recoveryPasswordFailed: true,
         recoveryPasswordSuccess: false,
-      }
+      };
     }
 
     case RECOVERY_PASSWORD_SUCCESS: {
       return {
         ...state,
-
         form: {
           ...state.form,
-          email: '',
+          email: "",
         },
-
         message: action.message,
-
         recoveryPasswordRequest: false,
-        recoveryPasswordFaild: false,
+        recoveryPasswordFailed: false,
         recoveryPasswordSuccess: true,
-      }
+        recoveryPasswordResponse: action.payload,
+      };
     }
-
 
     //Сброс пароля
-    case RESET_PASSWORD_REQUEST: {
+    case SET_PASSWORD_REQUEST: {
       return {
         ...state,
-
-        resetPasswordRequest: true,
-        resetPasswordFaild: false,
-        resetPasswordSuccess: false,
-      }
+        setPasswordRequest: true,
+        setPasswordFailed: false,
+        setPasswordSuccess: false,
+      };
     }
 
-    case RESET_PASSWORD_FAILED: {
+    case SET_PASSWORD_FAILED: {
       return {
         ...state,
-
-        resetPasswordRequest: false,
-        resetPasswordFaild: true,
-        resetPasswordSuccess: false,
-      }
+        setPasswordRequest: false,
+        setPasswordFailed: true,
+        setPasswordSuccess: false,
+      };
     }
 
-    case RESET_PASSWORD_SUCCESS: {
+    case SET_PASSWORD_SUCCESS: {
       return {
         ...state,
-
-        resetPasswordRequest: false,
-        resetPasswordFaild: false,
-        resetPasswordSuccess: true,
-      }
+        setPasswordRequest: false,
+        setPasswordFailed: false,
+        setPasswordSuccess: true,
+        setPasswordResponse: action.payload,
+      };
     }
 
     //Обновление токена
@@ -349,32 +352,32 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         updateTokenRequest: true,
-        updateTokenFaild: false,
+        updateTokenFailed: false,
         updateTokenSuccess: false,
-      }
+      };
     }
 
     case UPDATE_TOKEN_FAILED: {
       return {
         ...state,
         updateTokenRequest: false,
-        updateTokenFaild: true,
+        updateTokenFailed: true,
         updateTokenSuccess: false,
-      }
+      };
     }
 
     case UPDATE_TOKEN_SUCCESS: {
       return {
         ...state,
         updateTokenRequest: false,
-        updateTokenFaild: false,
+        updateTokenFailed: false,
         updateTokenSuccess: true,
-      }
+        updateTokenResponse: action.payload,
+      };
     }
 
     default: {
       return state;
     }
   }
-
-}
+};

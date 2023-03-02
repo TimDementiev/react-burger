@@ -38,7 +38,12 @@ export const ForgotPasswordPage = () => {
             size={"default"}
           />
         </div>
-        <Button disabled={!values.email} type="primary" size="medium">
+        <Button
+          htmlType="submit"
+          disabled={!values.email}
+          type="primary"
+          size="medium"
+        >
           {recoveryPasswordSuccess ? <Navigate to="/reset-password" /> : ""}
           Восстановить
         </Button>

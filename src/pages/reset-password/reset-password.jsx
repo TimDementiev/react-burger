@@ -6,14 +6,14 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { useForm } from "../../hooks/use-form";
-import { resetPassword } from "../../services/actions/auth";
+import { setPassword } from "../../services/actions/auth";
 import styles from "./reset-password.module.css";
 
 export const ResetPasswordPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
 
-  const { resetPasswordSuccess, recoveryPasswordSuccess } = useSelector(
+  const { setPasswordSuccess, recoveryPasswordSuccess } = useSelector(
     (state) => state.user
   );
 
@@ -21,7 +21,7 @@ export const ResetPasswordPage = () => {
 
   function formSubmit(e) {
     e.preventDefault();
-    dispatch(resetPassword({ password: values.password, token: values.code }));
+    dispatch(setPassword({ password: values.password, code: values.code }));
   }
 
   if (!recoveryPasswordSuccess) {
@@ -56,11 +56,12 @@ export const ResetPasswordPage = () => {
         </div>
         <div className={styles.button}>
           <Button
+            htmlType="submit"
             disabled={!values.password || !values.code}
             type="primary"
             size="medium"
           >
-            {!!resetPasswordSuccess ? (
+            {!!setPasswordSuccess ? (
               <Navigate to={location.state?.from || "/profile"} />
             ) : (
               ""

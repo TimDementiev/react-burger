@@ -21,7 +21,7 @@ export const HomePage = () => {
     <main className={styles.main}>
       {isLoading && "Loading"}
       {hasError && "Error"}
-      {!isLoading && (
+      {!isLoading && !hasError && (
         <DndProvider backend={HTML5Backend}>
           <BurgerIngredients />
           <BurgerConstructor />

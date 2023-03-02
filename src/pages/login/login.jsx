@@ -4,19 +4,28 @@ import {
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "../../hooks/use-form";
 import { authorization } from "../../services/actions/auth";
 import styles from "./login.module.css";
 
 export const LoginPage = () => {
   const { values, handleValues } = useForm({ email: "", password: "" });
-
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   function onSubmit(e) {
     e.preventDefault();
-    dispatch(authorization(values.email, values.password));
+    dispatch(
+      authorization(values.email, values.password, () =>
+        navigate(
+          location?.state?.previousLocation
+            ? location.state.previousLocation
+            : "/"
+        )
+      )
+    );
   }
 
   return (
@@ -42,6 +51,7 @@ export const LoginPage = () => {
           />
         </div>
         <Button
+          htmlType="submit"
           disabled={!values.password || !values.email}
           type="primary"
           size="medium"
@@ -64,4 +74,3 @@ export const LoginPage = () => {
     </div>
   );
 };
-
