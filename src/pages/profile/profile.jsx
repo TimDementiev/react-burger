@@ -2,6 +2,7 @@ import {
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { logout, updateUserData } from "../../services/actions/auth";
@@ -21,6 +22,12 @@ export const ProfilePage = () => {
     email: user.email,
     password: "",
   });
+
+  const isDataChanged = !(
+    values.email === user.email &&
+    values.name === user.name &&
+    values.password === ""
+  );
 
   function onLogout() {
     dispatch(logout(refreshToken, () => navigate("/", { replace: true })));
@@ -130,24 +137,26 @@ export const ProfilePage = () => {
             size={"default"}
           />
         </div>
-        <div className={styles.buttons}>
-          <Button
-            htmlType="button"
-            type="secondary"
-            size="medium"
-            onClick={reset}
-          >
-            Oтмена
-          </Button>
-          <Button
-            htmlType="submit"
-            disabled={!values.email && !values.password && !values.name}
-            type="primary"
-            size="medium"
-          >
-            Сохранить
-          </Button>
-        </div>
+        {isDataChanged && (
+          <div className={styles.buttons}>
+            <Button
+              htmlType="button"
+              type="secondary"
+              size="medium"
+              onClick={reset}
+            >
+              Oтмена
+            </Button>
+            <Button
+              htmlType="submit"
+              disabled={!values.email && !values.password && !values.name}
+              type="primary"
+              size="medium"
+            >
+              Сохранить
+            </Button>
+          </div>
+        )}
       </form>
     </div>
   );

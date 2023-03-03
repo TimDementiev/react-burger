@@ -60,7 +60,6 @@ export function registrateUser(email, password, name, forwarding) {
         dispatch({
           type: REGISTRATION_FORM_FAILED,
         });
-        alert("Ошибка регистрации");
       });
   };
 }
@@ -145,6 +144,7 @@ export function updateToken(refreshToken) {
         setCookie("token", res.accessToken.split("Bearer ")[1]);
         setCookie("refreshToken", res.refreshToken);
         dispatch({ type: UPDATE_TOKEN_SUCCESS, payload: res.success });
+        console.log("flag11");
       })
       .catch(() => {
         dispatch({
@@ -190,12 +190,12 @@ export function logout(refreshToken, forwarding) {
 }
 
 //Получение данных о пользователе
-export function getUserData(accessToken) {
+export function getUserData() {
   return function (dispatch) {
     dispatch({
       type: GET_USER_DATA_REQUEST,
     });
-    getUserDataRequest(accessToken)
+    getUserDataRequest()
       .then((res) => {
         dispatch({ type: SET_USER_DATA, payload: res.user });
         dispatch({ type: UPDATE_TOKEN_SUCCESS, payload: null });
@@ -208,9 +208,6 @@ export function getUserData(accessToken) {
         dispatch({
           type: GET_USER_DATA_FAILED,
         });
-        if (err.message === "jwt malformed" || err.message === "jwt expired") {
-          dispatch(updateToken(getCookie("refreshToken")));
-        }
       });
   };
 }
@@ -230,10 +227,7 @@ export function updateUserData(email, name, password, accessToken) {
         });
       })
       .catch((err) => {
-        if (err.message === "jwt malformed" || err.message === "jwt expired") {
-          dispatch(updateToken(getCookie("refreshToken")));
-          dispatch({ type: UPDATE_USER_FAILED });
-        }
+        dispatch({ type: UPDATE_USER_FAILED });
       });
   };
 }

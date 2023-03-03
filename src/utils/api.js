@@ -1,4 +1,4 @@
-import { getCookie } from "../utils/cookie";
+import { getCookie, setCookie } from "../utils/cookie";
 
 export const api = {
   url: "https://norma.nomoreparties.space/api",
@@ -67,19 +67,6 @@ export const authorizationRequest = (email, password) =>
     }),
   });
 
-//Обновление токена
-export const updateTokenRequest = (refreshToken) => {
-  return request(`${api.url}/auth/token`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      token: refreshToken,
-    }),
-  });
-};
-
 //Регистрация пользователя
 export const registrationRequest = async (email, password, name) => {
   return await request(`${api.url}/auth/register`, {
@@ -95,20 +82,33 @@ export const registrationRequest = async (email, password, name) => {
   });
 };
 
+//Обновление токена
+export const updateTokenRequest = (refreshToken) => {
+  return request(`${api.url}/auth/token`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      token: refreshToken,
+    }),
+  });
+};
+
 //Получение данных пользователя
-export const getUserDataRequest = async (accessToken) => {
-  return await request(`${api.url}/auth/user`, {
+export const getUserDataRequest = async () => {
+  return await fetchWithRefresh(`${api.url}/auth/user`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json; charset=utf-8",
-      authorization: `Bearer ${accessToken}`,
+      Authorization: "Bearer " + getCookie("token"),
     },
   });
 };
 
 //Обновление данных пользователя
 export const updateUserDataRequest = async (email, name, password) => {
-  return await request(`${api.url}/auth/user`, {
+  return await fetchWithRefresh(`${api.url}/auth/user`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -120,6 +120,35 @@ export const updateUserDataRequest = async (email, name, password) => {
       password: password,
     }),
   });
+};
+
+
+//Обновление токена для обработки данных пользователя
+export const fetchWithRefresh = async (url, options) => {
+  try {
+    const res = await fetch(url, options);
+    return await checkResponse(res);
+  } catch (err) {
+    console.log(err);
+    if (err.message === "jwt expired") {
+      const refreshToken = await updateTokenRequest();
+      const accessToken = refreshToken.accessToken.split("Bearer ")[1];
+      console.log("flag3");
+      if (!refreshToken.success) {
+        Promise.reject(refreshToken);
+        console.log("flag4");
+      }
+      setCookie("refreshToken", refreshToken.refreshToken);
+      setCookie("token", accessToken);
+
+      options.headers.Authorization = refreshToken.accessToken;
+      const res = await fetch(url, options);
+      return await checkResponse(res);
+    } else {
+      console.log("flag5");
+      return Promise.reject(err);
+    }
+  }
 };
 
 //Выход из профиля
@@ -148,15 +177,12 @@ export const recoveryPasswordRequest = (email) => {
 
 //Сброс пароля пользователя
 export const setPasswordRequest = (password, code) => {
-  return request(
-    `https://norma.nomoreparties.space/api/password-reset/reset`,
-    {
-      method: "POST",
-      headers: api.headers,
-      body: JSON.stringify({
-        password: password,
-        token: code,
-      }),
-    }
-  ).then((res) => checkResponse(res));
+  return request(`https://norma.nomoreparties.space/api/password-reset/reset`, {
+    method: "POST",
+    headers: api.headers,
+    body: JSON.stringify({
+      password: password,
+      token: code,
+    }),
+  }).then((res) => checkResponse(res));
 };

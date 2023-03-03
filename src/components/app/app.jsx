@@ -37,7 +37,7 @@ function App() {
 
   useEffect(() => {
     if (accessToken) {
-      dispatch(getUserData(accessToken));
+      dispatch(getUserData());
     }
   }, [dispatch, accessToken]);
 

@@ -22,7 +22,10 @@ export const modalType = {
 };
 
 export const ingredientCategoryType = {
-  data: PropTypes.arrayOf(ingredientType.isRequired).isRequired,
+  tabRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  ]),
   name: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
 };
