@@ -15,11 +15,15 @@ import {
   BURGER_CONSTRUCTOR_ADD_ITEM,
 } from "../../services/actions/burger-constructor";
 import ConstructorItems from "../burger-constructor-items/burger-constructor-items";
+import { useNavigate } from "react-router-dom";
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { bun, fillings } = useSelector((store) => store.burgerConstructor);
   const [totalCost, setTotalCost] = useState(0);
+  const [modalActive, setModalActive] = useState(false);
+  const user = useSelector((store) => store.user.user);
 
   const itemsData = useMemo(() => fillings.map((item) => item._id), [fillings]);
 
@@ -36,8 +40,16 @@ const BurgerConstructor = () => {
     setTotalCost(totalCost);
   }, [bun, filling]);
 
-  const [modalActive, setModalActive] = useState(false);
-  const toggleModal = () => setModalActive(!modalActive);
+  const openModal = () => {
+    if (!user) {
+      navigate("/login");
+    }
+    setModalActive(true);
+  };
+
+  const closeModal = () => {
+    setModalActive(false);
+  };
 
   const orderDetails = (productsid) => {
     dispatch(getOrderDetails(productsid));
@@ -63,7 +75,7 @@ const BurgerConstructor = () => {
   return (
     <section className={`${burgerConstructorStyles.section} pt-15`}>
       {modalActive && (
-        <Modal title="" onClose={toggleModal}>
+        <Modal title="" onClose={closeModal}>
           <OrderDetails />
         </Modal>
       )}
@@ -139,7 +151,7 @@ const BurgerConstructor = () => {
               size="large"
               onClick={() => {
                 orderDetails(itemsData);
-                toggleModal();
+                openModal();
               }}
               htmlType="button"
             >

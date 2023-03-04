@@ -1,25 +1,27 @@
-import React from "react";
-import ingredientDetailsStyles from "./ingredient-details.module.css";
-import { ingredientDetailsType } from "../../utils/types";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const IngredientDetails = (props) => {
+import ingredientDetailsStyles from "./ingredient-details.module.css";
+
+const IngredientDetails = () => {
+  const dataIngredients = useSelector((store) => store.burgerIngredients.data);
+  const { id } = useParams();
+  const ingredient = dataIngredients.find(
+    (ingredient) => ingredient._id === id
+  );
+
   return (
     <>
-      <h2
-        className={`${ingredientDetailsStyles.title}  text text_type_main-large pt-3 pb-2`}
-      >
-        Детали ингредиента
-      </h2>
       <div className={`${ingredientDetailsStyles.container}`}>
         <img
           className={`${ingredientDetailsStyles.pic}`}
-          src={props.image_large}
-          alt={props.name}
+          src={ingredient.image_large}
+          alt={ingredient.name}
         />
         <h3
           className={`${ingredientDetailsStyles.ingredient} text text_type_main-medium pt-4`}
         >
-          {props.name}
+          {ingredient.name}
         </h3>
         <ul className={`${ingredientDetailsStyles.list} pt-8`}>
           <li className={`${ingredientDetailsStyles.item}`}>
@@ -31,7 +33,7 @@ const IngredientDetails = (props) => {
             <p
               className={`${ingredientDetailsStyles.text} text text_type_digits-default text_color_inactive`}
             >
-              {props.calories}
+              {ingredient.calories}
             </p>
           </li>
           <li className={`${ingredientDetailsStyles.item}`}>
@@ -43,7 +45,7 @@ const IngredientDetails = (props) => {
             <p
               className={`${ingredientDetailsStyles.text} text text_type_digits-default text_color_inactive`}
             >
-              {props.proteins}
+              {ingredient.proteins}
             </p>
           </li>
           <li className={`${ingredientDetailsStyles.item}`}>
@@ -55,7 +57,7 @@ const IngredientDetails = (props) => {
             <p
               className={`${ingredientDetailsStyles.text} text text_type_digits-default text_color_inactive`}
             >
-              {props.fat}
+              {ingredient.fat}
             </p>
           </li>
           <li className={`${ingredientDetailsStyles.item}`}>
@@ -67,7 +69,7 @@ const IngredientDetails = (props) => {
             <p
               className={`${ingredientDetailsStyles.text} text text_type_digits-default text_color_inactive`}
             >
-              {props.carbohydrates}
+              {ingredient.carbohydrates}
             </p>
           </li>
         </ul>
@@ -75,7 +77,5 @@ const IngredientDetails = (props) => {
     </>
   );
 };
-
-IngredientDetails.propTypes = ingredientDetailsType;
 
 export default IngredientDetails;

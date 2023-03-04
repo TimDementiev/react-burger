@@ -1,74 +1,97 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { DndProvider } from "react-dnd";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 
 import AppHeader from "../app-header/app-header";
-import BurgerIngredients from "../burger-ingredients/burger-ingredients";
-import BurgerConstructor from "../burger-constructor/burger-constructor";
 import appStyles from "./app.module.css";
 import { getBurgerIngredients } from "../../services/actions/burger-ingredients";
-
+import {
+  HomePage,
+  LoginPage,
+  RegisterPage,
+  ForgotPasswordPage,
+  ResetPasswordPage,
+  ProfilePage,
+  IngredientPage,
+  NotFound404Page,
+} from "../../pages/index";
+import { getUserData } from "../../services/actions/auth";
+import { getCookie } from "../../utils/cookie";
+import Modal from "../modal/modal";
+import IngredientDetails from "../ingredient-details/ingredient-details";
+import { ProtectedRoute } from "../protected-route/protected-route";
+import { UnauthorizedRoute } from "../unauthorized-route/unauthorized-route";
 function App() {
   const dispatch = useDispatch();
-  const isLoading = useSelector((store) => store.burgerIngredients.isLoading);
-  const hasError = useSelector((store) => store.burgerIngredients.hasError);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const accessToken = getCookie("token");
+  const dataRequest = useSelector(
+    (store) => store.burgerIngredients.dataRequest
+  );
+  const background = location.state && location.state.previousLocation;
 
   useEffect(() => {
     dispatch(getBurgerIngredients());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (accessToken) {
+      dispatch(getUserData());
+    }
+  }, [dispatch, accessToken]);
+
+  const handleCloseModal = () => {
+    navigate(-1);
+  };
+
+
   return (
     <div className={appStyles.app}>
       <AppHeader />
-      {isLoading && "Loading"}
-      {hasError && "Error"}
-      {!isLoading && (
-        <main className={appStyles.main}>
-          <DndProvider backend={HTML5Backend}>
-            <BurgerIngredients />
-            <BurgerConstructor />
-          </DndProvider>
-        </main>
+      <Routes location={background || location}>
+        <Route path="/" element={<HomePage />} />
+        <Route
+          path="/login"
+          element={<UnauthorizedRoute element={<LoginPage />} />}
+        />
+        <Route
+          path="/register"
+          element={<UnauthorizedRoute element={<RegisterPage />} />}
+        />
+        <Route
+          path="/forgot-password"
+          element={<UnauthorizedRoute element={<ForgotPasswordPage />} />}
+        />
+        <Route
+          path="/reset-password"
+          element={<UnauthorizedRoute element={<ResetPasswordPage />} />}
+        />
+        <Route
+          path="/profile"
+          element={<ProtectedRoute element={<ProfilePage />} />}
+        />
+        <Route
+          path="/ingredients/:id"
+          element={!dataRequest ? "Loading" : <IngredientPage />}
+        />
+        <Route path="*" element={<NotFound404Page />} />
+      </Routes>
+
+      {background && (
+        <Routes>
+          <Route
+            path="/ingredients/:id"
+            element={
+              <Modal onClose={handleCloseModal} title="Детали ингредиента" >
+                {!dataRequest ? "Loading" : <IngredientDetails />}
+              </Modal>
+            }
+          />
+        </Routes>
       )}
     </div>
   );
 }
-
-// function App() {
-//   const [state, setData] = useState({
-//     data: [],
-//     loading: true,
-//     error: false,
-//   });
-
-//   useEffect(() => {
-//     setData({ ...state, loading: true, error: false });
-//     getInitialData()
-//       .then((res) => {
-//         setData({ ...state, data: res.data, loading: false });
-//       })
-//       .catch((err) => {
-//         setData({ ...state, loading: false, error: true });
-//         console.log(err);
-//       });
-//   }, []);
-
-//   return (
-//     <div className={appStyles.app}>
-//       <AppHeader />
-//       <IngredientsContext.Provider value={state}>
-//         {state.isLoading && "Loading"}
-//         {state.hasError && "Error"}
-//         {!state.loading && (
-//           <main className={appStyles.main}>
-//             <BurgerIngredients />
-//             <BurgerConstructor />
-//           </main>
-//         )}
-//       </IngredientsContext.Provider>
-//     </div>
-//   );
-// }
 
 export default App;

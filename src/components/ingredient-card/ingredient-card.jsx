@@ -1,6 +1,7 @@
 import { useDrag } from "react-dnd";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
 
 import { ingredientType } from "../../utils/types";
 import ingredientCardStyles from "./ingredient-card.module.css";
@@ -10,6 +11,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 const IngredientCard = (ingredient) => {
+  const location = useLocation();
   const { bun, fillings } = useSelector((store) => store.burgerConstructor);
 
   const [{ opacity }, dragRef] = useDrag({
@@ -31,8 +33,15 @@ const IngredientCard = (ingredient) => {
     [bun, fillings, ingredient._id]
   );
 
+
   return (
-    <div className={ingredientCardStyles.container} style={{ opacity }} ref={dragRef}>
+    <Link
+      to={`/ingredients/${ingredient._id}`}
+      state={{ previousLocation: location }}
+      className={`${ingredientCardStyles.container}`}
+      style={{ opacity }}
+      ref={dragRef}
+    >
       <img
         className={ingredientCardStyles.image}
         src={ingredient.image}
@@ -50,7 +59,7 @@ const IngredientCard = (ingredient) => {
         {ingredient.name}
       </h3>
       {counter() > 0 && <Counter count={counter()} size="default" />}
-    </div>
+    </Link>
   );
 };
 

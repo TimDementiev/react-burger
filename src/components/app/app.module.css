@@ -6,14 +6,3 @@
     background: var(--background-alt);
     box-sizing: content-box;
 }
-
-.main {
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(2, 600px) ;
-    gap: 40px;
-}
-
-/* *{
-    border: 1px red solid;
-} */

@@ -14,7 +14,7 @@
     height: inherit;
     min-width: 1320px;
     display: grid;
-    grid-template-columns: repeat(2, max-content) 676px max-content;
+    grid-template-columns: repeat(2, 207px) 1fr 207px;
     gap: 8px;
     justify-content: center;
     background: var(--background);
@@ -29,16 +29,16 @@
     border-radius: 40px;
     border: none;
     z-index: 2;
+    text-decoration: none;
+    color: inherit;
 }
 
 .logo {
-    margin: 0 auto;
-    position: absolute;
-    z-index: 0;
+    padding: 0 207px 0 0;
+    align-items: center;
     text-align: center;
-    top: 19px;
-    left: 0;
-    right: 0;
+    display: flex;
+    justify-content: center;
 }
 
 .profile {
