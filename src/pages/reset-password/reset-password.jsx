@@ -21,7 +21,7 @@ export const ResetPasswordPage = () => {
 
   function formSubmit(e) {
     e.preventDefault();
-    dispatch(setPassword({ password: values.password, code: values.code }));
+    dispatch(setPassword( values.password, values.code ));
   }
 
   if (!recoveryPasswordSuccess) {

@@ -108,12 +108,6 @@ export function recoveryPassword(email) {
   };
 }
 
-// export const setResetFormValue = (field, value) => ({
-//   type: RESET_FORM_SET_VALUE,
-//   field,
-//   value,
-// });
-
 //Установка пароля пользователя
 export function setPassword(password, code) {
   return function (dispatch) {
@@ -144,7 +138,7 @@ export function updateToken(refreshToken) {
         setCookie("token", res.accessToken.split("Bearer ")[1]);
         setCookie("refreshToken", res.refreshToken);
         dispatch({ type: UPDATE_TOKEN_SUCCESS, payload: res.success });
-        console.log("flag11");
+        console.log("flag refreshToken success");
       })
       .catch(() => {
         dispatch({
@@ -213,12 +207,12 @@ export function getUserData() {
 }
 
 //Обновление данных пользователя
-export function updateUserData(email, name, password, accessToken) {
+export function updateUserData(email, name, password) {
   return function (dispatch) {
     dispatch({
       type: UPDATE_USER_REQUEST,
     });
-    updateUserDataRequest(email, name, password, accessToken)
+    updateUserDataRequest(email, name, password)
       .then((res) => {
         dispatch({ type: SET_USER_DATA, payload: res.user });
         dispatch({

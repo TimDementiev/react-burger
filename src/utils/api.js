@@ -3,7 +3,7 @@ import { getCookie, setCookie } from "../utils/cookie";
 export const api = {
   url: "https://norma.nomoreparties.space/api",
   headers: {
-    "Content-Type": "aplication/json",
+    "Content-Type": "application/json",
   },
 };
 
@@ -28,7 +28,7 @@ export const getOrderData = (ingredientsData) => {
   return fetch(`${api.url}/orders`, {
     method: "POST",
     body: JSON.stringify({ ingredients: ingredientsData }),
-    headers: { "Content-Type": "application/json" },
+    headers: api.headers,
   }).then((res) => {
     if (res.ok) {
       return res.json();
@@ -40,16 +40,14 @@ export const getOrderData = (ingredientsData) => {
 export const getIngredients = async () => {
   return await request(`${api.url}/ingredients`, {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: api.headers,
   });
 };
 
 export const apiPostOrder = async (orderData) => {
   return await request(`${api.url}/orders`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: api.headers,
     body: JSON.stringify({ ingredients: orderData }),
   });
 };
@@ -58,9 +56,7 @@ export const apiPostOrder = async (orderData) => {
 export const authorizationRequest = (email, password) =>
   request(`${api.url}/auth/login`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: api.headers,
     body: JSON.stringify({
       email: email,
       password: password,
@@ -71,9 +67,7 @@ export const authorizationRequest = (email, password) =>
 export const registrationRequest = async (email, password, name) => {
   return await request(`${api.url}/auth/register`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: api.headers,
     body: JSON.stringify({
       email: email,
       password: password,
@@ -86,9 +80,7 @@ export const registrationRequest = async (email, password, name) => {
 export const updateTokenRequest = (refreshToken) => {
   return request(`${api.url}/auth/token`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: api.headers,
     body: JSON.stringify({
       token: refreshToken,
     }),
@@ -122,30 +114,24 @@ export const updateUserDataRequest = async (email, name, password) => {
   });
 };
 
-
 //Обновление токена для обработки данных пользователя
 export const fetchWithRefresh = async (url, options) => {
   try {
     const res = await fetch(url, options);
     return await checkResponse(res);
   } catch (err) {
-    console.log(err);
     if (err.message === "jwt expired") {
-      const refreshToken = await updateTokenRequest();
+      const refreshToken = await updateTokenRequest(getCookie("refreshToken"));
       const accessToken = refreshToken.accessToken.split("Bearer ")[1];
-      console.log("flag3");
       if (!refreshToken.success) {
         Promise.reject(refreshToken);
-        console.log("flag4");
       }
       setCookie("refreshToken", refreshToken.refreshToken);
       setCookie("token", accessToken);
-
       options.headers.Authorization = refreshToken.accessToken;
       const res = await fetch(url, options);
       return await checkResponse(res);
     } else {
-      console.log("flag5");
       return Promise.reject(err);
     }
   }
@@ -155,9 +141,7 @@ export const fetchWithRefresh = async (url, options) => {
 export const logoutRequest = (refreshToken) => {
   return request(`${api.url}/auth/logout`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: api.headers,
     body: JSON.stringify({
       token: refreshToken,
     }),
@@ -166,7 +150,7 @@ export const logoutRequest = (refreshToken) => {
 
 //Восстановление пароля
 export const recoveryPasswordRequest = (email) => {
-  return request(`https://norma.nomoreparties.space/api/password-reset`, {
+  return request(`${api.url}/password-reset`, {
     method: "POST",
     headers: api.headers,
     body: JSON.stringify({
@@ -177,7 +161,7 @@ export const recoveryPasswordRequest = (email) => {
 
 //Сброс пароля пользователя
 export const setPasswordRequest = (password, code) => {
-  return request(`https://norma.nomoreparties.space/api/password-reset/reset`, {
+  return request(`${api.url}/password-reset/reset`, {
     method: "POST",
     headers: api.headers,
     body: JSON.stringify({

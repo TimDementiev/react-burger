@@ -14,7 +14,7 @@ export const ProfilePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((store) => store.user.user);
-  const accessToken = getCookie("token");
+  // const accessToken = getCookie("token");
   const refreshToken = getCookie("refreshToken");
 
   const { values, handleValues, setValues } = useForm({
@@ -36,7 +36,7 @@ export const ProfilePage = () => {
   function submit(e) {
     e.preventDefault();
     dispatch(
-      updateUserData(values.email, values.name, values.password, accessToken)
+      updateUserData(values.email, values.name, values.password )
     );
   }
 
