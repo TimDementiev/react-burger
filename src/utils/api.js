@@ -168,5 +168,5 @@ export const setPasswordRequest = (password, code) => {
       password: password,
       token: code,
     }),
-  }).then((res) => checkResponse(res));
+  });
 };

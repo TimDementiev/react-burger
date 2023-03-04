@@ -160,9 +160,7 @@ export const authReducer = (state = initialState, action) => {
         updateUserDataRequest: false,
         updateUserDataSuccess: true,
         updateUserDataFailed: false,
-
         // user: action.user,
-
         form: {
           ...state.form,
           email: "",
@@ -197,12 +195,12 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         // user: action.user,
-        // form: {
-        //   ...state.form,
-        //   email: "",
-        //   password: "",
-        //   name: "",
-        // },
+        form: {
+          ...state.form,
+          email: "",
+          password: "",
+          name: "",
+        },
         registrationRequest: false,
         registrateUserFailed: false,
         registrateUserSuccess: true,
@@ -233,12 +231,12 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         // user: action.user,
-        // form: {
-        //   ...state.form,
-        //   email: "",
-        //   name: "",
-        //   password: "",
-        // },
+        form: {
+          ...state.form,
+          email: "",
+          name: "",
+          password: "",
+        },
         // isAuthSuccess: true,
         authorizationRequest: false,
         authorizationFailed: false,
@@ -270,12 +268,12 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         user: null,
-        // form: {
-        //   ...state.form,
-        //   email: "",
-        //   name: "",
-        //   password: "",
-        // },
+        form: {
+          ...state.form,
+          email: "",
+          name: "",
+          password: "",
+        },
         logoutRequest: false,
         logoutFailed: false,
         logoutSuccess: true,
