@@ -15,7 +15,6 @@ export const RegisterPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const user = useSelector((store) => store.user.user);
-  const isAuth = useSelector((store) => store.user.isAuth);
 
   const { values, handleValues } = useForm({
     name: "",
@@ -36,7 +35,7 @@ export const RegisterPage = () => {
     );
   };
 
-  if (user && isAuth) {
+  if (user) {
     return <Navigate to={"/"} />;
   }
 

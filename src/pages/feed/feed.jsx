@@ -7,7 +7,6 @@ import {
   wsFeedConnectionClosed,
   wsFeedConnectionOpen,
 } from "../../services/actions/ws_feed";
-
 import styles from "./feed.module.css";
 
 export const FeedPage = () => {
@@ -15,15 +14,16 @@ export const FeedPage = () => {
   const orders = useSelector((store) => store.wsFeed.orders);
 
   useEffect(() => {
+    console.log("flag0");
     dispatch(wsFeedConnectionOpen());
     return () => {
       dispatch(wsFeedConnectionClosed());
     };
   }, [dispatch]);
 
-  if (!orders.length) {
-    return <div>Loading</div>;
-  }
+  // if (!orders.length) {
+  //   return <div>Loading</div>;
+  // }
 
   return (
     <div className={styles.feed}>

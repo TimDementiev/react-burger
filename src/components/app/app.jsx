@@ -1,6 +1,12 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+  // useMatch,
+} from "react-router-dom";
 
 import AppHeader from "../app-header/app-header";
 import appStyles from "./app.module.css";
@@ -14,13 +20,16 @@ import {
   ProfilePage,
   IngredientPage,
   NotFound404Page,
+  FeedPage,
 } from "../../pages/index";
 import { getUserData } from "../../services/actions/auth";
 import { getCookie } from "../../utils/cookie";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
+import { OrderInfo } from "../order-info/order-info";
 import { ProtectedRoute } from "../protected-route/protected-route";
 import { UnauthorizedRoute } from "../unauthorized-route/unauthorized-route";
+
 function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -30,6 +39,8 @@ function App() {
     (store) => store.burgerIngredients.dataRequest
   );
   const background = location.state && location.state.previousLocation;
+  // const idOrderFeedInfo = useMatch(["/feed/:id"])?.params?.id;
+  // const idOrderProfileInfo = useMatch(["/profile/orders/:id"])?.params?.id;
 
   useEffect(() => {
     dispatch(getBurgerIngredients());
@@ -45,12 +56,12 @@ function App() {
     navigate(-1);
   };
 
-
   return (
     <div className={appStyles.app}>
       <AppHeader />
       <Routes location={background || location}>
         <Route path="/" element={<HomePage />} />
+        <Route path="/feed" element={<FeedPage />} />
         <Route
           path="/login"
           element={<UnauthorizedRoute element={<LoginPage />} />}
@@ -67,10 +78,19 @@ function App() {
           path="/reset-password"
           element={<UnauthorizedRoute element={<ResetPasswordPage />} />}
         />
+
         <Route
           path="/profile"
           element={<ProtectedRoute element={<ProfilePage />} />}
-        />
+        >
+          {/* <Route path="orders" element={<OrderInfo />} /> */}
+        </Route>
+
+        <Route
+          path="/profile/orders"
+          element={<ProtectedRoute element={<OrderInfo />} />}
+        ></Route>
+
         <Route
           path="/ingredients/:id"
           element={!dataRequest ? "Loading" : <IngredientPage />}
@@ -83,11 +103,37 @@ function App() {
           <Route
             path="/ingredients/:id"
             element={
-              <Modal onClose={handleCloseModal} title="Детали ингредиента" >
+              <Modal onClose={handleCloseModal} title="Детали ингредиента">
                 {!dataRequest ? "Loading" : <IngredientDetails />}
               </Modal>
             }
           />
+
+          {/* {idOrderFeedInfo && (
+            <Route
+              path="/feed/:id"
+              element={
+                <Modal onClose={handleCloseModal}>
+                  <OrderInfo />
+                </Modal>
+              }
+            />
+          )}
+
+          {idOrderProfileInfo && (
+            <Route
+              path="/profile/orders/:id"
+              element={
+                <ProtectedRoute
+                  element={
+                    <Modal onClose={handleCloseModal}>
+                      <OrderInfo />
+                    </Modal>
+                  }
+                />
+              }
+            />
+          )} */}
         </Routes>
       )}
     </div>

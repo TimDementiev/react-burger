@@ -24,12 +24,11 @@ import {
   UPDATE_TOKEN_REQUEST,
   UPDATE_TOKEN_SUCCESS,
   UPDATE_TOKEN_FAILED,
-  AUTH_CHECKED,
-  AUTH_CHECKED_FAILED,
+  // AUTH_CHECKED,
+  // AUTH_CHECKED_FAILED,
 } from "../actions/auth";
 
 const initialState = {
-  isAuthSuccess: false,
 
   form: {
     name: "",
@@ -93,19 +92,19 @@ export const authReducer = (state = initialState, action) => {
       };
     }
 
-    case AUTH_CHECKED: {
-      return {
-        ...state,
+    // case AUTH_CHECKED: {
+    //   return {
+    //     ...state,
 
-        isAuthSuccess: true,
-      };
-    }
-    case AUTH_CHECKED_FAILED: {
-      return {
-        ...state,
-        isAuthSuccess: false,
-      };
-    }
+    //     isAuthSuccess: true,
+    //   };
+    // }
+    // case AUTH_CHECKED_FAILED: {
+    //   return {
+    //     ...state,
+    //     isAuthSuccess: false,
+    //   };
+    // }
 
     //Получение данных пользователя
     case GET_USER_DATA_REQUEST: {
@@ -121,7 +120,7 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         getUserDataRequest: false,
         getUserDataFailed: true,
-        isAuthSuccess: false,
+        // isAuthSuccess: false,
       };
     }
 
@@ -131,7 +130,6 @@ export const authReducer = (state = initialState, action) => {
         getUserDataFailed: false,
         getUserDataSuccess: true,
         getUserDataResponse: action.payload,
-        // user: action.user,
       };
     }
 
@@ -160,7 +158,6 @@ export const authReducer = (state = initialState, action) => {
         updateUserDataRequest: false,
         updateUserDataSuccess: true,
         updateUserDataFailed: false,
-        // user: action.user,
         form: {
           ...state.form,
           email: "",
@@ -194,7 +191,6 @@ export const authReducer = (state = initialState, action) => {
     case REGISTRATION_FORM_SUCCESS: {
       return {
         ...state,
-        // user: action.user,
         form: {
           ...state.form,
           email: "",
@@ -223,7 +219,6 @@ export const authReducer = (state = initialState, action) => {
         authorizationRequest: false,
         authorizationFailed: true,
         authorizationSuccess: false,
-        // isAuthSuccess: false,
       };
     }
 
@@ -278,7 +273,6 @@ export const authReducer = (state = initialState, action) => {
         logoutFailed: false,
         logoutSuccess: true,
         logoutResponse: action.payload,
-        // isAuthSuccess: false,
       };
     }
 
