@@ -1,7 +1,7 @@
 import { rootReducer } from "./reducers/rootReducer";
-// import { composeWithDevTools } from 'redux-devtools-extension';
-import { compose, createStore, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { createStore, applyMiddleware } from "redux";
+import  thunk from "redux-thunk";
 import { socketMiddleware } from "./middleware/socketMiddleware";
 import {
   WS_FEED_CONNECTION_START,
@@ -42,30 +42,15 @@ const userOrdersWsActions = {
   onMessage: WS_ORDERS_GET_MESSAGE,
 };
 
-// const store = createStore(
-//   rootReducer,
-//   composeWithDevTools(
-//     applyMiddleware(
-//       thunk,
-//       socketMiddleware(wsUrl, feedWsActions),
-//       socketMiddleware(wsOrdersUrl, userOrdersWsActions),
-//     )
-//   )
-// );
-
-// export default store;
-
-const composeEnhancers =
-  typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
-    : compose;
-
-const enhancer = composeEnhancers(
-  applyMiddleware(
-    thunk,
-    socketMiddleware(wsUrl, feedWsActions),
-    socketMiddleware(wsOrdersUrl, userOrdersWsActions)
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(
+    applyMiddleware(
+      thunk,
+      socketMiddleware(wsUrl, feedWsActions),
+      socketMiddleware(wsOrdersUrl, userOrdersWsActions),
+    )
   )
 );
 
-export const store = createStore(rootReducer, enhancer);
+export default store;

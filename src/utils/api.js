@@ -15,46 +15,29 @@ function request(url, options) {
   return fetch(url, options).then(checkResponse);
 }
 
-export const getInitialData = () => {
-  return fetch(`${api.url}/ingredients`).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка ${res.status} - ${res.statusText}`);
-  });
-};
-
-export const getOrderData = (ingredientsData) => {
-  return fetch(`${api.url}/orders`, {
-    method: "POST",
-    body: JSON.stringify({ ingredients: ingredientsData }),
-    headers: api.headers,
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка ${res.status} - ${res.statusText}`);
-  });
-};
-
-export const getIngredients = async () => {
+//Запрос ингредиентов
+export const getInitialData = async () => {
   return await request(`${api.url}/ingredients`, {
     method: "GET",
     headers: api.headers,
   });
 };
 
-export const apiPostOrder = async (orderData) => {
+//Отправка заказа
+export const getOrderData = async (ingredientsData) => {
   return await request(`${api.url}/orders`, {
     method: "POST",
-    headers: api.headers,
-    body: JSON.stringify({ ingredients: orderData }),
+    body: JSON.stringify({ ingredients: ingredientsData }),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + getCookie("token"),
+    },
   });
 };
 
 //Авторизация пользователя
-export const authorizationRequest = (email, password) =>
-  request(`${api.url}/auth/login`, {
+export const authorizationRequest = async (email, password) => {
+  return await request(`${api.url}/auth/login`, {
     method: "POST",
     headers: api.headers,
     body: JSON.stringify({
@@ -62,6 +45,7 @@ export const authorizationRequest = (email, password) =>
       password: password,
     }),
   });
+};
 
 //Регистрация пользователя
 export const registrationRequest = async (email, password, name) => {
@@ -77,8 +61,8 @@ export const registrationRequest = async (email, password, name) => {
 };
 
 //Обновление токена
-export const updateTokenRequest = (refreshToken) => {
-  return request(`${api.url}/auth/token`, {
+export const updateTokenRequest = async (refreshToken) => {
+  return await request(`${api.url}/auth/token`, {
     method: "POST",
     headers: api.headers,
     body: JSON.stringify({
@@ -138,8 +122,8 @@ export const fetchWithRefresh = async (url, options) => {
 };
 
 //Выход из профиля
-export const logoutRequest = (refreshToken) => {
-  return request(`${api.url}/auth/logout`, {
+export const logoutRequest = async (refreshToken) => {
+  return await request(`${api.url}/auth/logout`, {
     method: "POST",
     headers: api.headers,
     body: JSON.stringify({
@@ -149,8 +133,8 @@ export const logoutRequest = (refreshToken) => {
 };
 
 //Восстановление пароля
-export const recoveryPasswordRequest = (email) => {
-  return request(`${api.url}/password-reset`, {
+export const recoveryPasswordRequest = async (email) => {
+  return await request(`${api.url}/password-reset`, {
     method: "POST",
     headers: api.headers,
     body: JSON.stringify({
@@ -160,8 +144,8 @@ export const recoveryPasswordRequest = (email) => {
 };
 
 //Сброс пароля пользователя
-export const setPasswordRequest = (password, code) => {
-  return request(`${api.url}/password-reset/reset`, {
+export const setPasswordRequest = async (password, code) => {
+  return await request(`${api.url}/password-reset/reset`, {
     method: "POST",
     headers: api.headers,
     body: JSON.stringify({

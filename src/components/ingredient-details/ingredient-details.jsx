@@ -12,6 +12,11 @@ const IngredientDetails = () => {
 
   return (
     <>
+      <h2
+        className={`${ingredientDetailsStyles.title} text text_type_main-large`}
+      >
+        Детали ингредиента
+      </h2>
       <div className={`${ingredientDetailsStyles.container}`}>
         <img
           className={`${ingredientDetailsStyles.pic}`}

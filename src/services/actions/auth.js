@@ -97,7 +97,6 @@ export function recoveryPassword(email) {
         dispatch({
           type: RECOVERY_PASSWORD_SUCCESS,
           payload: res.success,
-          // message: res.message,
         });
       })
       .catch(() => {

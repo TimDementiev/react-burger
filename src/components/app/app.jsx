@@ -5,7 +5,6 @@ import {
   Route,
   useLocation,
   useNavigate,
-  // useMatch,
 } from "react-router-dom";
 
 import AppHeader from "../app-header/app-header";
@@ -22,6 +21,8 @@ import {
   NotFound404Page,
   FeedPage,
 } from "../../pages/index";
+import { UserOrders } from "../../pages/profile/orders/orders";
+
 import { getUserData } from "../../services/actions/auth";
 import { getCookie } from "../../utils/cookie";
 import Modal from "../modal/modal";
@@ -38,9 +39,15 @@ function App() {
   const dataRequest = useSelector(
     (store) => store.burgerIngredients.dataRequest
   );
-  const background = location.state && location.state.previousLocation;
-  // const idOrderFeedInfo = useMatch(["/feed/:id"])?.params?.id;
-  // const idOrderProfileInfo = useMatch(["/profile/orders/:id"])?.params?.id;
+
+  const background =
+    location.state?.previousLocationConstructor ||
+    location.state?.previousLocationFeed ||
+    location.state?.previousLocationOrders;
+
+  const ingredientId = location.state?.previousLocationConstructor;
+  const orderIdFeed = location.state?.previousLocationFeed;
+  const orderIdProfile = location.state?.previousLocationOrders;
 
   useEffect(() => {
     dispatch(getBurgerIngredients());
@@ -62,6 +69,7 @@ function App() {
       <Routes location={background || location}>
         <Route path="/" element={<HomePage />} />
         <Route path="/feed" element={<FeedPage />} />
+        <Route path="/feed/:id" element={<OrderInfo />} />
         <Route
           path="/login"
           element={<UnauthorizedRoute element={<LoginPage />} />}
@@ -78,19 +86,16 @@ function App() {
           path="/reset-password"
           element={<UnauthorizedRoute element={<ResetPasswordPage />} />}
         />
-
         <Route
           path="/profile"
           element={<ProtectedRoute element={<ProfilePage />} />}
         >
-          {/* <Route path="orders" element={<OrderInfo />} /> */}
+          <Route path="/profile/orders" element={<UserOrders />} />
         </Route>
-
         <Route
-          path="/profile/orders"
+          path="/profile/orders/:id"
           element={<ProtectedRoute element={<OrderInfo />} />}
-        ></Route>
-
+        />
         <Route
           path="/ingredients/:id"
           element={!dataRequest ? "Loading" : <IngredientPage />}
@@ -98,44 +103,44 @@ function App() {
         <Route path="*" element={<NotFound404Page />} />
       </Routes>
 
-      {background && (
-        <Routes>
+      <Routes>
+        {ingredientId && (
           <Route
             path="/ingredients/:id"
             element={
-              <Modal onClose={handleCloseModal} title="Детали ингредиента">
+              <Modal onClose={handleCloseModal}>
                 {!dataRequest ? "Loading" : <IngredientDetails />}
               </Modal>
             }
           />
+        )}
 
-          {/* {idOrderFeedInfo && (
-            <Route
-              path="/feed/:id"
-              element={
-                <Modal onClose={handleCloseModal}>
-                  <OrderInfo />
-                </Modal>
-              }
-            />
-          )}
+        {orderIdFeed && (
+          <Route
+            path="/feed/:id"
+            element={
+              <Modal onClose={handleCloseModal}>
+                <OrderInfo />
+              </Modal>
+            }
+          />
+        )}
 
-          {idOrderProfileInfo && (
-            <Route
-              path="/profile/orders/:id"
-              element={
-                <ProtectedRoute
-                  element={
-                    <Modal onClose={handleCloseModal}>
-                      <OrderInfo />
-                    </Modal>
-                  }
-                />
-              }
-            />
-          )} */}
-        </Routes>
-      )}
+        {orderIdProfile && (
+          <Route
+            path="/profile/orders/:id"
+            element={
+              <ProtectedRoute
+                element={
+                  <Modal onClose={handleCloseModal}>
+                    <OrderInfo />
+                  </Modal>
+                }
+              />
+            }
+          />
+        )}
+      </Routes>
     </div>
   );
 }

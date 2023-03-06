@@ -5,28 +5,48 @@ import { useLocation, useParams, useMatch } from "react-router-dom";
 
 import styles from "./order-info.module.css";
 import { OrdersInfoIngredients } from "./order-info-ingredients/order-info-ingredients";
-import { wsOrdersConnectionClosed, wsOrdersConnectionOpen } from "../../services/actions/ws_orders";
-import { wsFeedConnectionClosed, wsFeedConnectionOpen } from "../../services/actions/ws_feed";
+import {
+  wsOrdersConnectionClosed,
+  wsOrdersConnectionOpen,
+} from "../../services/actions/ws_orders";
+import {
+  wsFeedConnectionClosed,
+  wsFeedConnectionOpen,
+} from "../../services/actions/ws_feed";
 import { getDate } from "../../utils/get-date";
 
 export const OrderInfo = () => {
   const dispatch = useDispatch();
-  const match = useMatch();
-  const { id } = useParams();
-  const isProfileOrders = "/profile/orders/:id";
-  const isFeed = "/feed/:id";
-
   const location = useLocation();
   const background = location.state?.background;
-
-  const ingredients = useSelector(
-    (store) => store.burgerIngredients.data
-  );
+  const { id } = useParams();
+  const isProfileOrders = useMatch("/profile/orders/:id");
+  const isAllOrders = useMatch("/feed/:id");
+  const ingredients = useSelector((store) => store.burgerIngredients.data);
   const feedOrders = useSelector((store) => store.wsFeed.orders);
   const profileOrders = useSelector((store) => store.wsOrders.orders);
 
-  let orders = match.path === isProfileOrders ? profileOrders : feedOrders;
-  let order = orders?.find((order) => order._id === id);
+  useEffect(() => {
+    if (isProfileOrders) {
+      dispatch(wsOrdersConnectionOpen());
+    }
+    if (isAllOrders) {
+      dispatch(wsFeedConnectionOpen());
+    }
+
+    return () => {
+      if (isProfileOrders) {
+        dispatch(wsOrdersConnectionClosed());
+      }
+      if (isAllOrders) {
+        dispatch(wsFeedConnectionClosed());
+      }
+    };
+  }, [dispatch, isProfileOrders, isAllOrders]);
+
+  const order =
+    profileOrders.find((item) => item._id === id) ??
+    feedOrders.find((item) => item._id === id);
 
   const orderIngredientsData = useMemo(() => {
     return order?.ingredients.map((id) => {
@@ -45,25 +65,6 @@ export const OrderInfo = () => {
     }, 0);
   }, [orderIngredientsData]);
 
-  useEffect(() => {
-    if (!order) {
-      if (match.path === isProfileOrders) {
-        dispatch(wsOrdersConnectionOpen());
-      }
-      if (match.path === isFeed) {
-        dispatch(wsFeedConnectionOpen());
-      }
-    }
-    return () => {
-      if (match.path === isProfileOrders) {
-        dispatch(wsOrdersConnectionClosed());
-      }
-      if (match.path === isFeed) {
-        dispatch(wsFeedConnectionClosed());
-      }
-    };
-  }, [dispatch, order, match.path, match.url]);
-
   return (
     <>
       {order && (
@@ -75,7 +76,7 @@ export const OrderInfo = () => {
           )}
           {!background && (
             <p
-              className={`${styles.order} text text_type_digits-default pb-10 mt-30`}
+              className={`${styles.order} text text_type_digits-default pb-10`}
             >
               #{order.number}
             </p>
@@ -84,12 +85,12 @@ export const OrderInfo = () => {
           {!!order.status && (
             <p className={`${styles.status} text text_type_main-default pb-15`}>
               {order.status === "done"
-              ? "Выполнен"
-              : order.status === "pending"
-              ? "Готовится"
-              : order.status === "created"
-              ? "Создан"
-              : "Выполнен"}
+                ? "Выполнен"
+                : order.status === "pending"
+                ? "Готовится"
+                : order.status === "created"
+                ? "Создан"
+                : "Выполнен"}
             </p>
           )}
           <h3 className={`text text_type_main-medium pb-6`}>Состав:</h3>

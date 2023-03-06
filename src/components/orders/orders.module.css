@@ -7,6 +7,7 @@
   overflow-y: scroll;
   height: calc(100vh - 235px);
   width: 100%;
+  min-width: 584px;
 }
 
 .orderList::-webkit-scrollbar-track {

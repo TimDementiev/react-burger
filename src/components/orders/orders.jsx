@@ -18,10 +18,8 @@ export const Orders = () => {
         orders.map((order) => {
           return (
             <Link
-              to={{
-                pathname: `${location.pathname}/${order._id}`,
-                state: { background: location },
-              }}
+              to={`${location.pathname}/${order._id}`}
+              state={{ previousLocationFeed: location }}
               className={`${styles.link}`}
               key={order._id}
             >

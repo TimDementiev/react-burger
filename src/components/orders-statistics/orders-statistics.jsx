@@ -42,16 +42,18 @@ export const OrdersStatistics = () => {
         <div className={styles.column}>
           <p className="text text_type_main-medium pb-6">В работе:</p>
           <ul className={styles.orderList}>
-            {pendingStatusOrder.map((order) => {
-              return (
-                <li
-                  className={`${styles.item} text text_type_digits-default`}
-                  key={order._id}
-                >
-                  {order.number}
-                </li>
-              );
-            })}
+            {!pendingStatusOrder.length
+              ? "Все заказы выполнены"
+              : pendingStatusOrder.map((order) => {
+                  return (
+                    <li
+                      className={`${styles.item} text text_type_digits-default`}
+                      key={order._id}
+                    >
+                      {order.number}
+                    </li>
+                  );
+                })}
           </ul>
         </div>
       </div>

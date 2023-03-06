@@ -14,20 +14,19 @@ export const FeedPage = () => {
   const orders = useSelector((store) => store.wsFeed.orders);
 
   useEffect(() => {
-    console.log("flag0");
     dispatch(wsFeedConnectionOpen());
     return () => {
       dispatch(wsFeedConnectionClosed());
     };
   }, [dispatch]);
 
-  // if (!orders.length) {
-  //   return <div>Loading</div>;
-  // }
+  if (!orders.length) {
+    return <div>Loading</div>;
+  }
 
   return (
     <div className={styles.feed}>
-      <h2 className="text text_type_main-large pt-10 pb-5">Лента заказов</h2>
+      <h2 className={`${styles.title} text text_type_main-large pt-10 pb-5`}>Лента заказов</h2>
       <div className={styles.container}>
         <Orders />
         <OrdersStatistics />

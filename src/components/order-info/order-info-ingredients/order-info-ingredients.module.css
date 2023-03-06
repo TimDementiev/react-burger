@@ -42,3 +42,12 @@
   display: flex;
   align-items: center;
 }
+
+.image {
+  width: 64px;
+  height: 64px;
+  border: #4C4CFF 1px solid;
+  object-fit: cover;
+  border-radius: 32px;
+
+}
