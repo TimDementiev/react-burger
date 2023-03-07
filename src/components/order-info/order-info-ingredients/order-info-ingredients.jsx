@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import propTypes from "prop-types";
-
+import {ingredientType} from "../../../utils/types";
 import styles from "./order-info-ingredients.module.css";
 
 export const OrdersInfoIngredients = ({ details }) => {
@@ -65,5 +65,5 @@ export const OrdersInfoIngredients = ({ details }) => {
 };
 
 OrdersInfoIngredients.propTypes = {
-  details: propTypes.array.isRequired,
+  details: propTypes.arrayOf(ingredientType.isRequired).isRequired,
 };

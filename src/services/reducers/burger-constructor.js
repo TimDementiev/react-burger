@@ -16,9 +16,7 @@ export const burgerConstructorReducer = (state = initialState, action) => {
     case BURGER_CONSTRUCTOR_DELETE_ITEM: {
       return {
         ...state,
-        fillings: [...state.fillings].filter((item) => {
-          return item.id !== action.id;
-        }),
+        fillings: [...state.fillings].filter((item) => item.id !== action.id),
       };
     }
     case BURGER_CONSTRUCTOR_ADD_BUN: {

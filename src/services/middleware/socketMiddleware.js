@@ -1,6 +1,5 @@
 import { getCookie } from "../../utils/cookie";
-import { updateToken } from '../actions/auth';
-
+import { updateToken } from "../actions/auth";
 
 export const socketMiddleware = (wsUrl, wsActions) => {
   return (store) => {
@@ -12,15 +11,18 @@ export const socketMiddleware = (wsUrl, wsActions) => {
       const { wsInit, wsSendMessage, onOpen, onClose, onError, onMessage } =
         wsActions;
       const { user } = getState().user;
-      const accessToken = getCookie("token");
-	  const refreshToken = getCookie('refreshToken');
 
       if (type === wsInit) {
         if (!user) {
           socket = new WebSocket(wsUrl);
         } else {
+          const accessToken = getCookie("token");
           socket = new WebSocket(`${wsUrl}?token=${accessToken}`);
         }
+      }
+
+      if (type === onClose) {
+        socket && socket.close(1000, "CLOSE_NORMAL");
       }
 
       if (socket) {
@@ -39,9 +41,9 @@ export const socketMiddleware = (wsUrl, wsActions) => {
 
           dispatch({ type: onMessage, payload: restParsedData });
 
-		  if (restParsedData.message === 'Invalid or missing token') {
+          if (restParsedData.message === "Invalid or missing token") {
+            const refreshToken = getCookie("refreshToken");
             dispatch(updateToken(refreshToken));
-            console.log("flag 007")
           }
         };
 

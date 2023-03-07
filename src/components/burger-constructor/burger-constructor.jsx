@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback, } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useDrop } from "react-dnd";
 import {
@@ -25,7 +25,13 @@ const BurgerConstructor = () => {
   const [modalActive, setModalActive] = useState(false);
   const user = useSelector((store) => store.user.user);
 
-  const itemsData = useMemo(() => fillings.map((item) => item._id), [fillings]);
+  const itemsData = useCallback(() => {
+    let itemsId = [];
+    let fillingId = fillings.map((item) => item._id);
+    let bunId = [bun._id];
+    itemsId = fillingId.concat(bunId);
+    return itemsId
+  }, [fillings, bun]);
 
   const filling = useMemo(
     () => fillings.filter((item) => item.type !== "bun"),
@@ -150,7 +156,7 @@ const BurgerConstructor = () => {
               type="primary"
               size="large"
               onClick={() => {
-                orderDetails(itemsData);
+                orderDetails(itemsData());
                 openModal();
               }}
               htmlType="button"

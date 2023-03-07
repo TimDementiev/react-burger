@@ -9,8 +9,8 @@ export const OrdersStatistics = () => {
     return arr?.reduce(
       (acc, curr) => {
         curr.status === "done"
-          ? (acc.done = [...acc.done, curr])
-          : (acc.pending = [...acc.pending, curr]);
+          ? (acc.done.push(curr))
+          : (acc.pending.push(curr));
         return acc;
       },
       { done: [], pending: [] }

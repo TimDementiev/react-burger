@@ -137,7 +137,7 @@ export function updateToken(refreshToken) {
         setCookie("token", res.accessToken.split("Bearer ")[1]);
         setCookie("refreshToken", res.refreshToken);
         dispatch({ type: UPDATE_TOKEN_SUCCESS, payload: res.success });
-        console.log("flag refreshToken success");
+
       })
       .catch(() => {
         dispatch({

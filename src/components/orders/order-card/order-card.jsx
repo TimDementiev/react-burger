@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import propTypes from "prop-types";
-
+import { ingredientType } from "../../../utils/types";
 import styles from "./order-card.module.css";
 import { getDate } from "../../../utils/get-date";
 
@@ -57,7 +57,7 @@ export const OrderCard = ({ order, statusVue }) => {
           {orderIngredientsData &&
             arrIngredientsLength <= 5 &&
             orderIngredientsData.map((item, index) => {
-              let zIndex = maxIngredients - index;
+              const zIndex = maxIngredients - index;
               return (
                 <li
                   className={styles.items}
@@ -81,7 +81,7 @@ export const OrderCard = ({ order, statusVue }) => {
           {orderIngredientsData &&
             arrIngredientsLength >= 6 &&
             orderIngredientsData.slice(0, 5).map((item, index) => {
-              let zIndex = maxIngredients - index;
+              const zIndex = maxIngredients - index;
               return (
                 <li
                   className={styles.items}
@@ -105,7 +105,7 @@ export const OrderCard = ({ order, statusVue }) => {
           {orderIngredientsData &&
             arrIngredientsLength > 6 &&
             orderIngredientsData.slice(5, 6).map((item, index) => {
-              let zIndex = -index;
+              const zIndex = -index;
               return (
                 <li
                   className={styles.items}
@@ -148,6 +148,14 @@ export const OrderCard = ({ order, statusVue }) => {
 };
 
 OrderCard.propTypes = {
-  order: propTypes.object.isRequired,
+  order: propTypes.shape({
+    createdAt: propTypes.string.isRequired,
+    ingredients: propTypes.arrayOf(ingredientType.isRequired).isRequired,
+    name: propTypes.string.isRequired,
+    number: propTypes.number.isRequired,
+    status: propTypes.string.isRequired,
+    updatedAt: propTypes.string.isRequired,
+    _id: propTypes.string.isRequired,
+  }),
   status: propTypes.bool,
 };

@@ -1,48 +1,19 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useParams, useMatch } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useLocation, useParams, } from "react-router-dom";
 
 import styles from "./order-info.module.css";
 import { OrdersInfoIngredients } from "./order-info-ingredients/order-info-ingredients";
-import {
-  wsOrdersConnectionClosed,
-  wsOrdersConnectionOpen,
-} from "../../services/actions/ws_orders";
-import {
-  wsFeedConnectionClosed,
-  wsFeedConnectionOpen,
-} from "../../services/actions/ws_feed";
 import { getDate } from "../../utils/get-date";
 
 export const OrderInfo = () => {
-  const dispatch = useDispatch();
   const location = useLocation();
   const background = location.state?.background;
   const { id } = useParams();
-  const isProfileOrders = useMatch("/profile/orders/:id");
-  const isAllOrders = useMatch("/feed/:id");
   const ingredients = useSelector((store) => store.burgerIngredients.data);
   const feedOrders = useSelector((store) => store.wsFeed.orders);
   const profileOrders = useSelector((store) => store.wsOrders.orders);
-
-  useEffect(() => {
-    if (isProfileOrders) {
-      dispatch(wsOrdersConnectionOpen());
-    }
-    if (isAllOrders) {
-      dispatch(wsFeedConnectionOpen());
-    }
-
-    return () => {
-      if (isProfileOrders) {
-        dispatch(wsOrdersConnectionClosed());
-      }
-      if (isAllOrders) {
-        dispatch(wsFeedConnectionClosed());
-      }
-    };
-  }, [dispatch, isProfileOrders, isAllOrders]);
 
   const order =
     profileOrders.find((item) => item._id === id) ??
