@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import propTypes from "prop-types";
-import { ingredientType } from "../../../utils/types";
 import styles from "./order-card.module.css";
 import { getDate } from "../../../utils/get-date";
 
