@@ -1,23 +1,32 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useSelector } from "react-redux";
-import { useLocation, useParams, } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useParams, useMatch } from "react-router-dom";
 
 import styles from "./order-info.module.css";
 import { OrdersInfoIngredients } from "./order-info-ingredients/order-info-ingredients";
 import { getDate } from "../../utils/get-date";
+import {
+  wsFeedConnectionClosed,
+  wsFeedConnectionOpen,
+} from "../../services/actions/ws_feed";
+import {
+  wsOrdersConnectionClosed,
+  wsOrdersConnectionOpen,
+} from "../../services/actions/ws_orders";
 
 export const OrderInfo = () => {
+  const dispatch = useDispatch();
   const location = useLocation();
   const background = location.state?.background;
   const { id } = useParams();
+  const isProfileOrders = useMatch("/profile/orders/:id");
+  const isAllOrders = useMatch("/feed/:id");
   const ingredients = useSelector((store) => store.burgerIngredients.data);
   const feedOrders = useSelector((store) => store.wsFeed.orders);
   const profileOrders = useSelector((store) => store.wsOrders.orders);
-
-  const order =
-    profileOrders.find((item) => item._id === id) ??
-    feedOrders.find((item) => item._id === id);
+  let orders = isProfileOrders ? profileOrders : feedOrders;
+  let order = orders?.find((order) => order._id === id);
 
   const orderIngredientsData = useMemo(() => {
     return order?.ingredients.map((id) => {
@@ -30,11 +39,28 @@ export const OrderInfo = () => {
   const orderTotalPrice = useMemo(() => {
     return orderIngredientsData?.reduce((sum, item) => {
       if (item?.type === "bun") {
-        return (sum += item.price * 2);
+        return (sum += item.price);
       }
       return (sum += item.price);
     }, 0);
   }, [orderIngredientsData]);
+
+  useEffect(() => {
+    if (isProfileOrders) {
+      dispatch(wsOrdersConnectionOpen());
+    }
+    if (isAllOrders) {
+      dispatch(wsFeedConnectionOpen());
+    }
+    return () => {
+      if (isProfileOrders) {
+        dispatch(wsOrdersConnectionClosed());
+      }
+      if (isAllOrders) {
+        dispatch(wsFeedConnectionClosed());
+      }
+    };
+  }, [dispatch, isProfileOrders, isAllOrders]);
 
   return (
     <>

@@ -5,6 +5,11 @@ import PropTypes from "prop-types";
 export const ProtectedRoute = ({ element }) => {
   const location = useLocation();
   const user = useSelector((store) => store.user.user);
+  const isAuthSuccess = useSelector((store) => store.user.isAuthSuccess);
+
+  if (!isAuthSuccess) {
+   <div>Loading</div>
+  }
 
   if (!user) {
     return <Navigate to="/login" replace state={{ from: location }} />;

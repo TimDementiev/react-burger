@@ -49,9 +49,7 @@ export const OrdersInfoIngredients = ({ details }) => {
                   </div>
                   <div className={styles.price}>
                     <p className="text text_type_digits-default pr-2">
-                      {item.type === "bun"
-                        ? `${count(item) * 2} x ${item.price}`
-                        : `${count(item)} x ${item.price}`}
+                      {`${count(item)} x ${item.price}`}
                     </p>
                     <CurrencyIcon type="primary" />
                   </div>

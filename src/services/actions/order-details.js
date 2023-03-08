@@ -1,6 +1,5 @@
 import { getOrderData } from "../../utils/api";
 import { updateToken } from "../actions/auth";
-import { getCookie } from "../../utils/cookie";
 
 export const CREATE_ORDER_REQUEST = "CREATE_ORDER_REQUEST";
 export const CREATE_ORDER_SUCCESS = "CREATE_ORDER_SUCCESS";
@@ -20,7 +19,7 @@ export function getOrderDetails(order) {
         });
       })
       .catch(() => {
-        dispatch(updateToken(getCookie("refreshToken")));
+        dispatch(updateToken());
         dispatch({
           type: CREATE_ORDER_FAILED,
         });

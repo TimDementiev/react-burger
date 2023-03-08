@@ -24,7 +24,7 @@ export const OrderCard = ({ order, statusVue }) => {
   const orderTotalPrice = useMemo(() => {
     return orderIngredientsData?.reduce((sum, item) => {
       if (item?.type === "bun") {
-        return (sum += item.price * 2);
+        return (sum += item.price);
       }
       return (sum += item ? item.price : 0);
     }, 0);
@@ -150,7 +150,7 @@ export const OrderCard = ({ order, statusVue }) => {
 OrderCard.propTypes = {
   order: propTypes.shape({
     createdAt: propTypes.string.isRequired,
-    ingredients: propTypes.arrayOf(ingredientType.isRequired).isRequired,
+    ingredients: propTypes.arrayOf(propTypes.string.isRequired).isRequired,
     name: propTypes.string.isRequired,
     number: propTypes.number.isRequired,
     status: propTypes.string.isRequired,

@@ -42,8 +42,7 @@ export const socketMiddleware = (wsUrl, wsActions) => {
           dispatch({ type: onMessage, payload: restParsedData });
 
           if (restParsedData.message === "Invalid or missing token") {
-            const refreshToken = getCookie("refreshToken");
-            dispatch(updateToken(refreshToken));
+            dispatch(updateToken());
           }
         };
 

@@ -1,13 +1,8 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Routes,
-  Route,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 
-import AppHeader from "../app-header/app-header";
+import Header from "../../pages/header/header";
 import appStyles from "./app.module.css";
 import { getBurgerIngredients } from "../../services/actions/burger-ingredients";
 import {
@@ -21,7 +16,6 @@ import {
   NotFound404Page,
   FeedPage,
 } from "../../pages/index";
-import { UserOrders } from "../../pages/profile/orders/orders";
 
 import { getUserData } from "../../services/actions/auth";
 import { getCookie } from "../../utils/cookie";
@@ -55,7 +49,7 @@ function App() {
 
   useEffect(() => {
     if (accessToken) {
-      dispatch(getUserData());
+      dispatch(getUserData(accessToken));
     }
   }, [dispatch, accessToken]);
 
@@ -65,46 +59,49 @@ function App() {
 
   return (
     <div className={appStyles.app}>
-      <AppHeader />
       <Routes location={background || location}>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/feed" element={<FeedPage />} />
-        <Route path="/feed/:id" element={<OrderInfo />} />
-        <Route
-          path="/login"
-          element={<UnauthorizedRoute element={<LoginPage />} />}
-        />
-        <Route
-          path="/register"
-          element={<UnauthorizedRoute element={<RegisterPage />} />}
-        />
-        <Route
-          path="/forgot-password"
-          element={<UnauthorizedRoute element={<ForgotPasswordPage />} />}
-        />
-        <Route
-          path="/reset-password"
-          element={<UnauthorizedRoute element={<ResetPasswordPage />} />}
-        />
-        <Route
-          path="/profile"
-          element={<ProtectedRoute element={<ProfilePage />} />}
-        >
-          <Route path="/profile/orders" element={<UserOrders />} />
+        <Route path="/" element={<Header />}>
+          <Route index element={<HomePage />} />
+          <Route path="/feed" element={<FeedPage />} />
+          <Route path="/feed/:id" element={<OrderInfo />} />
+          <Route
+            path="/login"
+            element={<UnauthorizedRoute element={<LoginPage />} />}
+          />
+          <Route
+            path="/register"
+            element={<UnauthorizedRoute element={<RegisterPage />} />}
+          />
+          <Route
+            path="/forgot-password"
+            element={<UnauthorizedRoute element={<ForgotPasswordPage />} />}
+          />
+          <Route
+            path="/reset-password"
+            element={<UnauthorizedRoute element={<ResetPasswordPage />} />}
+          />
+          <Route
+            path="/profile"
+            element={<ProtectedRoute element={<ProfilePage />} />}
+          />
+          <Route
+            path="/profile/orders/:id"
+            element={<ProtectedRoute element={<OrderInfo />} />}
+          />
+          <Route
+            path="/profile/orders"
+            element={<ProtectedRoute element={<ProfilePage />} />}
+          />
+          <Route
+            path="/ingredients/:id"
+            element={!dataRequest ? "Loading" : <IngredientPage />}
+          />
+          <Route path="*" element={<NotFound404Page />} />
         </Route>
-        <Route
-          path="/profile/orders/:id"
-          element={<ProtectedRoute element={<OrderInfo />} />}
-        />
-        <Route
-          path="/ingredients/:id"
-          element={!dataRequest ? "Loading" : <IngredientPage />}
-        />
-        <Route path="*" element={<NotFound404Page />} />
       </Routes>
 
-      <Routes>
-        {ingredientId && (
+      {ingredientId && (
+        <Routes>
           <Route
             path="/ingredients/:id"
             element={
@@ -113,9 +110,11 @@ function App() {
               </Modal>
             }
           />
-        )}
+        </Routes>
+      )}
 
-        {orderIdFeed && (
+      {orderIdFeed && (
+        <Routes>
           <Route
             path="/feed/:id"
             element={
@@ -124,9 +123,11 @@ function App() {
               </Modal>
             }
           />
-        )}
+        </Routes>
+      )}
 
-        {orderIdProfile && (
+      {orderIdProfile && (
+        <Routes>
           <Route
             path="/profile/orders/:id"
             element={
@@ -139,8 +140,8 @@ function App() {
               />
             }
           />
-        )}
-      </Routes>
+        </Routes>
+      )}
     </div>
   );
 }

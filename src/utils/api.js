@@ -61,23 +61,23 @@ export const registrationRequest = async (email, password, name) => {
 };
 
 //Обновление токена
-export const updateTokenRequest = async (refreshToken) => {
+export const updateTokenRequest = async () => {
   return await request(`${api.url}/auth/token`, {
     method: "POST",
     headers: api.headers,
     body: JSON.stringify({
-      token: refreshToken,
+      token: localStorage.getItem("refreshToken"),
     }),
   });
 };
 
 //Получение данных пользователя
-export const getUserDataRequest = async () => {
+export const getUserDataRequest = async (accessToken) => {
   return await fetchWithRefresh(`${api.url}/auth/user`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json; charset=utf-8",
-      Authorization: "Bearer " + getCookie("token"),
+      authorization: `Bearer ${accessToken}`,
     },
   });
 };
@@ -105,12 +105,13 @@ export const fetchWithRefresh = async (url, options) => {
     return await checkResponse(res);
   } catch (err) {
     if (err.message === "jwt expired") {
-      const refreshToken = await updateTokenRequest(getCookie("refreshToken"));
+      const refreshToken = await updateTokenRequest();
       const accessToken = refreshToken.accessToken.split("Bearer ")[1];
+
       if (!refreshToken.success) {
         Promise.reject(refreshToken);
       }
-      setCookie("refreshToken", refreshToken.refreshToken);
+      localStorage.setItem("refreshToken", refreshToken.refreshToken);
       setCookie("token", accessToken);
       options.headers.Authorization = refreshToken.accessToken;
       const res = await fetch(url, options);
@@ -122,12 +123,12 @@ export const fetchWithRefresh = async (url, options) => {
 };
 
 //Выход из профиля
-export const logoutRequest = async (refreshToken) => {
+export const logoutRequest = async () => {
   return await request(`${api.url}/auth/logout`, {
     method: "POST",
     headers: api.headers,
     body: JSON.stringify({
-      token: refreshToken,
+      token: localStorage.getItem("refreshToken"),
     }),
   });
 };

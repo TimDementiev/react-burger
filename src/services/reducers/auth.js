@@ -24,9 +24,12 @@ import {
   UPDATE_TOKEN_REQUEST,
   UPDATE_TOKEN_SUCCESS,
   UPDATE_TOKEN_FAILED,
+  AUTH_CHECKED,
+  AUTH_CHECKED_FAILED,
 } from "../actions/auth";
 
 const initialState = {
+  isAuthSuccess: false,
 
   form: {
     name: "",
@@ -80,6 +83,21 @@ const initialState = {
 
 export const authReducer = (state = initialState, action) => {
   switch (action.type) {
+    case AUTH_CHECKED: {
+      return {
+        ...state,
+
+        isAuthSuccess: true,
+      };
+    }
+    case AUTH_CHECKED_FAILED: {
+      return {
+        ...state,
+
+        isAuthSuccess: false,
+      };
+    }
+
     case SET_USER_DATA: {
       return {
         ...state,
@@ -104,6 +122,7 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         getUserDataRequest: false,
         getUserDataFailed: true,
+        isAuthSuccess: false,
       };
     }
 
@@ -202,6 +221,7 @@ export const authReducer = (state = initialState, action) => {
         authorizationRequest: false,
         authorizationFailed: true,
         authorizationSuccess: false,
+        isAuthSuccess: false,
       };
     }
 
@@ -218,6 +238,7 @@ export const authReducer = (state = initialState, action) => {
         authorizationFailed: false,
         authorizationSuccess: true,
         authorizationResponse: action.payload,
+        isAuthSuccess: true,
       };
     }
 
@@ -254,6 +275,7 @@ export const authReducer = (state = initialState, action) => {
         logoutFailed: false,
         logoutSuccess: true,
         logoutResponse: action.payload,
+        isAuthSuccess: false,
       };
     }
 

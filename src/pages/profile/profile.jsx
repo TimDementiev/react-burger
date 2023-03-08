@@ -1,21 +1,24 @@
 import {
+  NavLink,
+  useNavigate,
+  useMatch,
+} from "react-router-dom";
+import {
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useNavigate, useLocation, Outlet } from "react-router-dom";
 
 import { logout, updateUserData } from "../../services/actions/auth";
 import styles from "./profile.module.css";
 import { useForm } from "../../hooks/use-form";
-import { getCookie } from "../../utils/cookie";
+
+import { UserOrders } from "./orders/orders";
 
 export const ProfilePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
   const user = useSelector((store) => store.user.user);
-  const refreshToken = getCookie("refreshToken");
 
   const { values, handleValues, setValues } = useForm({
     name: user.name,
@@ -29,8 +32,11 @@ export const ProfilePage = () => {
     values.password === ""
   );
 
+  const profileLink = useMatch("/profile");
+  const ordersLink = useMatch("/profile/orders");
+
   function onLogout() {
-    dispatch(logout(refreshToken, () => navigate("/", { replace: true })));
+    dispatch(logout(() => navigate("/", { replace: true })));
   }
 
   function submit(e) {
@@ -98,9 +104,8 @@ export const ProfilePage = () => {
         </p>
       </nav>
 
-      {location.state?.orders || location.pathname === "/profile/orders" ? (
-        <Outlet />
-      ) : (
+      {ordersLink && <UserOrders />}
+      {profileLink && (
         <form className={styles.form} onSubmit={submit}>
           <div className="pb-6">
             <Input

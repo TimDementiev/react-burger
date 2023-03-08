@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useCallback, } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useDrop } from "react-dnd";
 import {
@@ -23,14 +23,13 @@ const BurgerConstructor = () => {
   const { bun, fillings } = useSelector((store) => store.burgerConstructor);
   const [totalCost, setTotalCost] = useState(0);
   const [modalActive, setModalActive] = useState(false);
-  const user = useSelector((store) => store.user.user);
-
+  const isAuthSuccess = useSelector((store) => store.user.isAuthSuccess);
   const itemsData = useCallback(() => {
     let itemsId = [];
     let fillingId = fillings.map((item) => item._id);
     let bunId = [bun._id];
-    itemsId = fillingId.concat(bunId);
-    return itemsId
+    itemsId = [bunId, ...fillingId, bunId];
+    return itemsId;
   }, [fillings, bun]);
 
   const filling = useMemo(
@@ -47,7 +46,7 @@ const BurgerConstructor = () => {
   }, [bun, filling]);
 
   const openModal = () => {
-    if (!user) {
+    if (!isAuthSuccess) {
       navigate("/login");
     }
     setModalActive(true);
