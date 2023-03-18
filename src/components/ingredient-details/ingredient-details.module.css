@@ -22,6 +22,8 @@
 
 .title {
     align-self: flex-start;
+    line-height: 64px;
+
 }
 
 .ingredient {

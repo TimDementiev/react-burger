@@ -1,0 +1,17 @@
+.container {
+  padding: 0 50px;
+  margin: auto;
+  max-width: 1244px;
+  display: flex;
+  flex-direction: row;
+  align-self: flex-start;
+  gap: 60px;
+  color: #F2F2F3;
+}
+
+.title {
+  padding-left: 50px;
+  padding-right: 50px;
+  margin: auto;
+  max-width: 1244px;
+}

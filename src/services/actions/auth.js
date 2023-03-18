@@ -47,8 +47,10 @@ export function registrateUser(email, password, name, forwarding) {
     });
     registrationRequest(email, password, name)
       .then((res) => {
-        setCookie("token", res.accessToken.split("Bearer ")[1]);
-        setCookie("refreshToken", res.refreshToken);
+        const authToken = res.accessToken.split("Bearer ")[1];
+        const refreshToken = res.refreshToken;
+        setCookie("token", authToken);
+        localStorage.setItem("refreshToken", refreshToken);
         dispatch({
           type: REGISTRATION_FORM_SUCCESS,
           payload: res.user,
@@ -72,8 +74,9 @@ export function authorization(email, password, forwarding) {
     });
     authorizationRequest(email, password)
       .then((res) => {
+        const refreshToken = res.refreshToken;
         setCookie("token", res.accessToken.split("Bearer ")[1]);
-        setCookie("refreshToken", res.refreshToken);
+        localStorage.setItem("refreshToken", refreshToken);
         dispatch({ type: LOGIN_SUCCESS, payload: res.success });
         dispatch({ type: SET_USER_DATA, payload: res.user });
         forwarding();
@@ -97,7 +100,6 @@ export function recoveryPassword(email) {
         dispatch({
           type: RECOVERY_PASSWORD_SUCCESS,
           payload: res.success,
-          // message: res.message,
         });
       })
       .catch(() => {
@@ -130,15 +132,16 @@ export function setPassword(password, code) {
 }
 
 //Обновление токена
-export function updateToken(refreshToken) {
+export function updateToken() {
   return function (dispatch) {
     dispatch({ type: UPDATE_TOKEN_REQUEST });
-    updateTokenRequest(refreshToken)
+    updateTokenRequest()
       .then((res) => {
         setCookie("token", res.accessToken.split("Bearer ")[1]);
-        setCookie("refreshToken", res.refreshToken);
+        const refreshToken = res.refreshToken;
+        localStorage.setItem("refreshToken", refreshToken);
         dispatch({ type: UPDATE_TOKEN_SUCCESS, payload: res.success });
-        console.log("flag refreshToken success");
+
       })
       .catch(() => {
         dispatch({
@@ -163,16 +166,16 @@ export const checkUserAuth = () => {
 };
 
 //Выход из профиля
-export function logout(refreshToken, forwarding) {
+export function logout(forwarding) {
   return function (dispatch) {
     dispatch({
       type: LOGOUT_REQUEST,
     });
-    logoutRequest(refreshToken)
+    logoutRequest()
       .then((res) => {
         dispatch({ type: LOGOUT_SUCCESS, payload: res.success });
         deleteCookie("token");
-        deleteCookie("refreshToken");
+        localStorage.clear()
         forwarding();
       })
       .catch(() => {
@@ -184,12 +187,12 @@ export function logout(refreshToken, forwarding) {
 }
 
 //Получение данных о пользователе
-export function getUserData() {
+export function getUserData(accessToken) {
   return function (dispatch) {
     dispatch({
       type: GET_USER_DATA_REQUEST,
     });
-    getUserDataRequest()
+    getUserDataRequest(accessToken)
       .then((res) => {
         dispatch({ type: SET_USER_DATA, payload: res.user });
         dispatch({ type: UPDATE_TOKEN_SUCCESS, payload: null });

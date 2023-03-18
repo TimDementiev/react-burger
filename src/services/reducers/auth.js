@@ -83,16 +83,6 @@ const initialState = {
 
 export const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_USER_DATA: {
-      return {
-        ...state,
-        user: {
-          name: action.payload.name,
-          email: action.payload.email,
-        },
-      };
-    }
-
     case AUTH_CHECKED: {
       return {
         ...state,
@@ -103,7 +93,18 @@ export const authReducer = (state = initialState, action) => {
     case AUTH_CHECKED_FAILED: {
       return {
         ...state,
+
         isAuthSuccess: false,
+      };
+    }
+
+    case SET_USER_DATA: {
+      return {
+        ...state,
+        user: {
+          name: action.payload.name,
+          email: action.payload.email,
+        },
       };
     }
 
@@ -131,7 +132,6 @@ export const authReducer = (state = initialState, action) => {
         getUserDataFailed: false,
         getUserDataSuccess: true,
         getUserDataResponse: action.payload,
-        // user: action.user,
       };
     }
 
@@ -160,7 +160,6 @@ export const authReducer = (state = initialState, action) => {
         updateUserDataRequest: false,
         updateUserDataSuccess: true,
         updateUserDataFailed: false,
-        // user: action.user,
         form: {
           ...state.form,
           email: "",
@@ -194,7 +193,6 @@ export const authReducer = (state = initialState, action) => {
     case REGISTRATION_FORM_SUCCESS: {
       return {
         ...state,
-        // user: action.user,
         form: {
           ...state.form,
           email: "",
@@ -223,25 +221,24 @@ export const authReducer = (state = initialState, action) => {
         authorizationRequest: false,
         authorizationFailed: true,
         authorizationSuccess: false,
-        // isAuthSuccess: false,
+        isAuthSuccess: false,
       };
     }
 
     case LOGIN_SUCCESS: {
       return {
         ...state,
-        // user: action.user,
         form: {
           ...state.form,
           email: "",
           name: "",
           password: "",
         },
-        // isAuthSuccess: true,
         authorizationRequest: false,
         authorizationFailed: false,
         authorizationSuccess: true,
         authorizationResponse: action.payload,
+        isAuthSuccess: true,
       };
     }
 
@@ -278,7 +275,7 @@ export const authReducer = (state = initialState, action) => {
         logoutFailed: false,
         logoutSuccess: true,
         logoutResponse: action.payload,
-        // isAuthSuccess: false,
+        isAuthSuccess: false,
       };
     }
 

@@ -1,10 +1,35 @@
+import { useEffect } from "react";
+import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+
 import orderDetailsStyles from "./order-details.module.css";
 import doneIcon from "../../images/done.svg";
-import PropTypes from "prop-types";
-import { useSelector } from 'react-redux';
+import { resetOrderNumber } from "../../services/actions/order-details";
+import { resetConstructor } from "../../services/actions/burger-constructor";
 
 const OrderDetails = () => {
+  const dispatch = useDispatch();
   const orderNumber = useSelector((store) => store.order.number);
+
+  useEffect(() => {
+    return dispatch(resetOrderNumber());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (orderNumber !== null) {
+      dispatch(resetConstructor());
+    }
+  }, [orderNumber, dispatch]);
+
+  if (orderNumber === null) {
+    return (
+      <p
+        className={`${orderDetailsStyles.text} text text_type_main-large pb-15`}
+      >
+        Получение номера заказа
+      </p>
+    );
+  }
 
   return (
     <div className={`${orderDetailsStyles.container} pl-25 pr-25`}>

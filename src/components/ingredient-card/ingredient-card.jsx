@@ -33,11 +33,10 @@ const IngredientCard = (ingredient) => {
     [bun, fillings, ingredient._id]
   );
 
-
   return (
     <Link
       to={`/ingredients/${ingredient._id}`}
-      state={{ previousLocation: location }}
+      state={{ previousLocationConstructor: location }}
       className={`${ingredientCardStyles.container}`}
       style={{ opacity }}
       ref={dragRef}
