@@ -1,18 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FC } from "react";
 import { useInView } from "react-intersection-observer";
 import burgerIngredientsStyles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import IngredientCategory from "../ingredient-category/ingredient-category";
 
-const BurgerIngredients = () => {
+const BurgerIngredients: FC = () => {
   const [current, setCurrent] = useState("bun");
   const [bunRef, bunInView] = useInView({ threshold: 0.1 });
   const [sauceRef, sauceInView] = useInView({ threshold: 0.1 });
   const [mainRef, mainInView] = useInView({ threshold: 0.1 });
 
-  const clickOnTab = (type) => {
+  const clickOnTab = (type:string) => {
     setCurrent(type);
-    const section = document.getElementById(type);
+    const section = document.getElementById(type) as HTMLElement;
     section.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
@@ -62,18 +62,16 @@ const BurgerIngredients = () => {
         </Tab>
       </div>
       <ul className={`${burgerIngredientsStyles.ingredients} mt-10 `}>
-        <IngredientCategory type="bun" tabRef={bunRef} name="Булки" id="bun" />
+        <IngredientCategory type="bun" tabRef={bunRef} name="Булки" />
         <IngredientCategory
           type="sauce"
           tabRef={sauceRef}
           name="Соусы"
-          id="sauce"
         />
         <IngredientCategory
           type="main"
           tabRef={mainRef}
           name="Начинки"
-          id="main"
         />
       </ul>
     </section>

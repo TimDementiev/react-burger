@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useMemo, useState, useCallback, FC } from "react";
+import { useDispatch, useSelector } from "../../services/types/index";
 import { useDrop } from "react-dnd";
 import {
   ConstructorElement,
@@ -16,30 +16,38 @@ import {
 } from "../../services/actions/burger-constructor";
 import ConstructorItems from "../burger-constructor-items/burger-constructor-items";
 import { useNavigate } from "react-router-dom";
+import { TConstructorIngredient, TIngredient } from "../../services/types/data";
 
-const BurgerConstructor = () => {
+interface IDropItem {
+  ingredient: TConstructorIngredient;
+  _id: string;
+  bun: TIngredient;
+  fillings: TConstructorIngredient[]
+}
+
+const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { bun, fillings } = useSelector((store) => store.burgerConstructor);
+  const { bun, fillings } = useSelector((store:any) => store.burgerConstructor);
   const [totalCost, setTotalCost] = useState(0);
   const [modalActive, setModalActive] = useState(false);
-  const isAuthSuccess = useSelector((store) => store.user.isAuthSuccess);
+  const isAuthSuccess = useSelector((store:any) => store.user.isAuthSuccess);
   const itemsData = useCallback(() => {
     let itemsId = [];
-    let fillingId = fillings.map((item) => item._id);
+    let fillingId = fillings.map((item: any) => item._id);
     let bunId = [bun._id];
     itemsId = [bunId, ...fillingId, bunId];
     return itemsId;
   }, [fillings, bun]);
 
   const filling = useMemo(
-    () => fillings.filter((item) => item.type !== "bun"),
+    () => fillings.filter((item: any) => item.type !== "bun"),
     [fillings]
   );
 
   useEffect(() => {
     const totalCost = filling.reduce(
-      (current, total) => current + total.price,
+      (current: number , total: any) => current + total.price,
       bun === null ? 0 : bun.price * 2
     );
     setTotalCost(totalCost);
@@ -56,13 +64,13 @@ const BurgerConstructor = () => {
     setModalActive(false);
   };
 
-  const orderDetails = (productsid) => {
+  const orderDetails = (productsid: Array<string>) => {
     dispatch(getOrderDetails(productsid));
   };
 
   const [, dropTarget] = useDrop({
     accept: "fillings",
-    drop(item) {
+    drop(item: IDropItem) {
       if (item.ingredient.type === "bun") {
         dispatch({
           type: BURGER_CONSTRUCTOR_ADD_BUN,
@@ -80,7 +88,7 @@ const BurgerConstructor = () => {
   return (
     <section className={`${burgerConstructorStyles.section} pt-15`}>
       {modalActive && (
-        <Modal title="" onClose={closeModal}>
+        <Modal onClose={closeModal}>
           <OrderDetails />
         </Modal>
       )}
@@ -96,14 +104,14 @@ const BurgerConstructor = () => {
                   type="top"
                   isLocked={true}
                   text={`${bun.name} (верх)`}
-                  price={`${bun.price}`}
+                  price={bun.price}
                   thumbnail={`${bun.image}`}
                 />
               </div>
             )}
             <ul className={`${burgerConstructorStyles.fillingList}`}>
               {fillings.length > 0 ? (
-                fillings.map((item, index) => {
+                fillings.map((item: TConstructorIngredient, index: number) => {
                   return (
                     <ConstructorItems index={index} key={item.id} item={item} />
                   );
@@ -122,7 +130,7 @@ const BurgerConstructor = () => {
                   type="bottom"
                   isLocked={true}
                   text={`${bun.name} (низ)`}
-                  price={`${bun.price}`}
+                  price={bun.price}
                   thumbnail={`${bun.image}`}
                 />
               </div>

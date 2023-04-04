@@ -1,32 +1,44 @@
-import { useRef } from "react";
+import { useRef, FC } from "react";
 import {
   ConstructorElement,
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../services/types/index";
+// @ts-ignore
 import { useDrag, useDrop } from "react-dnd";
 import {
   BURGER_CONSTRUCTOR_DELETE_ITEM,
   BURGER_CONSTRUCTOR_MOVE_ITEM,
 } from "../../services/actions/burger-constructor";
 import styles from "./burger-constructor-items.module.css";
-import { ingredientType } from "../../utils/types";
+import { TConstructorIngredient } from "../../services/types/data";
 
-const ConstructorItems = ({ index, item }) => {
+type TDragItem = {
+	index: number;
+	type: string;
+	id?: string;
+};
+
+type TConstructorItems = {
+  index: number,
+  item: TConstructorIngredient;
+}
+
+const ConstructorItems: FC<TConstructorItems> = ({ index, item }) => {
   const { image, id, price, name } = item;
   const ref = useRef(null);
   const dispatch = useDispatch();
 
-  const onDelete = (id) => {
+  const onDelete = (id: string) => {
     dispatch({
       type: BURGER_CONSTRUCTOR_DELETE_ITEM,
       id: id,
     });
   };
 
-  const [, drop] = useDrop({
+  const [, drop] = useDrop<TDragItem >({
     accept: "item",
-    hover(item) {
+    hover(item: any) {
       if (!ref.current) {
         return;
       }
@@ -43,7 +55,7 @@ const ConstructorItems = ({ index, item }) => {
   const [{ opacity }, drag] = useDrag({
     type: "item",
     item: { id, index },
-    collect: (monitor) => {
+    collect: (monitor: any) => {
       return {
         opacity: monitor.isDragging() ? 0.5 : 1,
       };
@@ -67,10 +79,6 @@ const ConstructorItems = ({ index, item }) => {
       />
     </li>
   );
-};
-
-ConstructorItems.propTypes = {
-  item: ingredientType.isRequired,
 };
 
 export default ConstructorItems;

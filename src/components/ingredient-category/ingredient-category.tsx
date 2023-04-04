@@ -1,11 +1,17 @@
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/types/index";
 
 import ingredientCategoryStyles from "./ingredient-category.module.css";
-import IngredientCard from "../ingredient-card/ingredient-card.jsx";
-import { ingredientCategoryType } from "../../utils/types";
+import IngredientCard from "../ingredient-card/ingredient-card";
+import { FC } from 'react';
 
-const IngredientCategory = ({tabRef, name, type}) => {
-  const data = useSelector((store) => store.burgerIngredients.data);
+type TProps = {
+  tabRef: any,
+  name: string,
+  type: string
+}
+
+const IngredientCategory: FC<TProps> = ({tabRef, name, type}) => {
+  const data = useSelector((store:any) => store.burgerIngredients.data);
 
   return (
     <section className="mb-10" id={type}>
@@ -13,7 +19,7 @@ const IngredientCategory = ({tabRef, name, type}) => {
         {name}
       </h2>
       <ul className={`${ingredientCategoryStyles.ingredients}`}>
-        {data.map((e) => {
+        {data.map((e:any) => {
           if (e.type === type) {
             return (
               <li
@@ -30,7 +36,5 @@ const IngredientCategory = ({tabRef, name, type}) => {
     </section>
   );
 }
-
-IngredientCategory.propTypes = ingredientCategoryType;
 
 export default IngredientCategory;

@@ -1,19 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, FC } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 
 import styles from "./modal.module.css";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { modalType } from "../../utils/types";
+import { TModal } from '../../services/types/data';
 
-const modalContainer = document.getElementById("modal");
+const modalContainer = document.getElementById("modal") as HTMLElement;
 
-const Modal = ({ title, onClose, children }) => {
+const Modal:FC<TModal> = ( { onClose, children} ) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleEscKeydown = (e) => {
+    const handleEscKeydown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         onClose();
       }
@@ -27,7 +27,7 @@ const Modal = ({ title, onClose, children }) => {
   return createPortal(
     <>
       <div className={`${styles.popup} pt-10 pb-15 pl-10 pr-10`}>
-        <h3 className={`${styles.title} text text_type_main-large`}>{title}</h3>
+        {/* <h3 className={`${styles.title} text text_type_main-large`}>{title}</h3> */}
         <button className={styles.closeButton} onClick={onClose}>
           <CloseIcon type="primary" />
         </button>
@@ -39,6 +39,6 @@ const Modal = ({ title, onClose, children }) => {
   );
 };
 
-Modal.propTypes = modalType;
+
 
 export default Modal;

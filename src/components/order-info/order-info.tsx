@@ -1,6 +1,6 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, FC } from "react";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../services/types/index";
 import { useLocation, useParams, useMatch } from "react-router-dom";
 
 import styles from "./order-info.module.css";
@@ -14,30 +14,31 @@ import {
   wsOrdersConnectionClosed,
   wsOrdersConnectionOpen,
 } from "../../services/actions/ws_orders";
+import { TIngredient } from "../../services/types/data";
 
-export const OrderInfo = () => {
+export const OrderInfo: FC = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const background = location.state?.background;
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const isProfileOrders = useMatch("/profile/orders/:id");
   const isAllOrders = useMatch("/feed/:id");
-  const ingredients = useSelector((store) => store.burgerIngredients.data);
-  const feedOrders = useSelector((store) => store.wsFeed.orders);
-  const profileOrders = useSelector((store) => store.wsOrders.orders);
+  const ingredients = useSelector((store:any) => store.burgerIngredients.data);
+  const feedOrders = useSelector((store:any) => store.wsFeed.orders);
+  const profileOrders = useSelector((store:any) => store.wsOrders.orders);
   let orders = isProfileOrders ? profileOrders : feedOrders;
-  let order = orders?.find((order) => order._id === id);
+  let order = orders?.find((order: any) => order._id === id);
 
   const orderIngredientsData = useMemo(() => {
-    return order?.ingredients.map((id) => {
-      return ingredients?.find((item) => {
+    return order?.ingredients.map((id: string) => {
+      return ingredients?.find((item: TIngredient) => {
         return id === item._id;
       });
     });
   }, [order?.ingredients, ingredients]);
 
   const orderTotalPrice = useMemo(() => {
-    return orderIngredientsData?.reduce((sum, item) => {
+    return orderIngredientsData?.reduce((sum: number, item: {type:string, price: number}) => {
       if (item?.type === "bun") {
         return (sum += item.price);
       }

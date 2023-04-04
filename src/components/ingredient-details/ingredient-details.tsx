@@ -1,13 +1,17 @@
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/types/index";
+import { FC } from "react";
 
 import ingredientDetailsStyles from "./ingredient-details.module.css";
+import { TIngredient } from "../../services/types/data";
 
-const IngredientDetails = () => {
-  const dataIngredients = useSelector((store) => store.burgerIngredients.data);
-  const { id } = useParams();
+const IngredientDetails: FC = () => {
+  const dataIngredients = useSelector(
+    (store: any) => store.burgerIngredients.data
+  );
+  const { id } = useParams<{ id: string }>();
   const ingredient = dataIngredients.find(
-    (ingredient) => ingredient._id === id
+    (ingredient: TIngredient) => ingredient._id === id
   );
 
   return (

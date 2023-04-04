@@ -1,23 +1,26 @@
+// @ts-ignore
 import { useDrag } from "react-dnd";
-import { useMemo } from "react";
-import { useSelector } from "react-redux";
+import { useMemo, FC } from "react";
+import { useSelector } from "../../services/types/index";
 import { Link, useLocation } from "react-router-dom";
 
-import { ingredientType } from "../../utils/types";
 import ingredientCardStyles from "./ingredient-card.module.css";
 import {
   CurrencyIcon,
   Counter,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import { TIngredient } from "../../services/types/data";
 
-const IngredientCard = (ingredient) => {
+
+
+const IngredientCard: FC<TIngredient> = (ingredient) => {
   const location = useLocation();
-  const { bun, fillings } = useSelector((store) => store.burgerConstructor);
+  const { bun, fillings } = useSelector((store:any) => store.burgerConstructor);
 
   const [{ opacity }, dragRef] = useDrag({
     type: "fillings",
     item: { ingredient },
-    collect: (monitor) => ({
+    collect: (monitor: any) => ({
       opacity: monitor.isDragging() ? 0.5 : 1,
     }),
   });
@@ -50,7 +53,7 @@ const IngredientCard = (ingredient) => {
         <span className={`text text_type_digits-default`}>
           {ingredient.price}
         </span>
-        <CurrencyIcon />
+        <CurrencyIcon type={"secondary"}/>
       </div>
       <h3
         className={`${ingredientCardStyles.title} text text_type_main-default`}
@@ -62,6 +65,5 @@ const IngredientCard = (ingredient) => {
   );
 };
 
-IngredientCard.propTypes = ingredientType.isRequired;
 
 export default IngredientCard;

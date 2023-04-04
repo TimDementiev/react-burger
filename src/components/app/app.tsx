@@ -1,5 +1,6 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect, FC } from "react";
+// import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "../../services/types/index";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 
 import Header from "../../pages/header/header";
@@ -25,13 +26,13 @@ import { OrderInfo } from "../order-info/order-info";
 import { ProtectedRoute } from "../protected-route/protected-route";
 import { UnauthorizedRoute } from "../unauthorized-route/unauthorized-route";
 
-function App() {
+const App: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const accessToken = getCookie("token");
   const dataRequest = useSelector(
-    (store) => store.burgerIngredients.dataRequest
+    (store: any) => store.burgerIngredients.dataRequest
   );
 
   const background =
@@ -144,6 +145,6 @@ function App() {
       )}
     </div>
   );
-}
+};
 
 export default App;

@@ -1,12 +1,18 @@
-import { useMemo } from "react";
-import { useSelector } from "react-redux";
+import { useMemo, FC } from "react";
+import { useSelector } from "../../../services/types/index";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import propTypes from "prop-types";
+
 import styles from "./order-card.module.css";
 import { getDate } from "../../../utils/get-date";
+import { TFeed, TIngredient } from "../../../services/types/data";
 
-export const OrderCard = ({ order, statusVue }) => {
-  const ingredients = useSelector((store) => store.burgerIngredients.data);
+type TOrderCard = {
+  order: TFeed;
+  statusVue: boolean;
+}
+
+export const OrderCard: FC<TOrderCard> = ({ order, statusVue }) => {
+  const ingredients = useSelector((store:any) => store.burgerIngredients.data);
   const { createdAt, number, name } = order;
   const arrIngredientsLength = order.ingredients.length;
   const hideIngredients = arrIngredientsLength - 6;
@@ -14,7 +20,7 @@ export const OrderCard = ({ order, statusVue }) => {
 
   const orderIngredientsData = useMemo(() => {
     return order?.ingredients.map((id) => {
-      return ingredients?.find((item) => {
+      return ingredients?.find((item: TIngredient) => {
         return id === item._id;
       });
     });
@@ -146,15 +152,3 @@ export const OrderCard = ({ order, statusVue }) => {
   );
 };
 
-OrderCard.propTypes = {
-  order: propTypes.shape({
-    createdAt: propTypes.string.isRequired,
-    ingredients: propTypes.arrayOf(propTypes.string.isRequired).isRequired,
-    name: propTypes.string.isRequired,
-    number: propTypes.number.isRequired,
-    status: propTypes.string.isRequired,
-    updatedAt: propTypes.string.isRequired,
-    _id: propTypes.string.isRequired,
-  }),
-  status: propTypes.bool,
-};

@@ -4,10 +4,11 @@ import {
   ListIcon,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import { FC } from "react";
 import { Link, useLocation } from "react-router-dom";
 import headerStyles from "./app-header.module.css";
 
-const AppHeader = () => {
+const AppHeader:FC = () => {
   const location = useLocation();
 
   return (

@@ -1,15 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, FC } from "react";
 import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../services/types/index";
 
 import orderDetailsStyles from "./order-details.module.css";
 import doneIcon from "../../images/done.svg";
 import { resetOrderNumber } from "../../services/actions/order-details";
 import { resetConstructor } from "../../services/actions/burger-constructor";
 
-const OrderDetails = () => {
+const OrderDetails: FC = () => {
   const dispatch = useDispatch();
-  const orderNumber = useSelector((store) => store.order.number);
+  const orderNumber = useSelector((store:any) => store.order.number);
 
   useEffect(() => {
     return dispatch(resetOrderNumber());

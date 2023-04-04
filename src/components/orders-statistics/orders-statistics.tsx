@@ -1,13 +1,15 @@
-import { useSelector } from "react-redux";
+import { FC } from 'react'
+import { useSelector } from "../../services/types/index";
 
 import styles from "./orders-statistics.module.css";
+import { TFeed } from "../../services/types/data";
 
-export const OrdersStatistics = () => {
-  const { total, totalToday, orders } = useSelector((store) => store.wsFeed);
+export const OrdersStatistics: FC = () => {
+  const { total, totalToday, orders } = useSelector((store:any) => store.wsFeed);
 
-  const filterOrders = (arr) => {
+  const filterOrders = (arr: Array<TFeed>) => {
     return arr?.reduce(
-      (acc, curr) => {
+      (acc: { done:  TFeed[], pending:  TFeed[]}, curr) => {
         curr.status === "done"
           ? (acc.done.push(curr))
           : (acc.pending.push(curr));
