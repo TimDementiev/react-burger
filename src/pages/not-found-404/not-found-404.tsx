@@ -1,8 +1,9 @@
+import { FC } from 'react'
 import { Link } from "react-router-dom";
 import notFound404Img from "../../images/NotFound404.png";
 import styles from "./not-found-404.module.css";
 
-export const NotFound404Page = () => {
+export const NotFound404Page: FC = () => {
   return (
     <div className={`${styles.container} pb-20`}>
       <img className={styles.img} src={notFound404Img} alt={"NotFound404"} />

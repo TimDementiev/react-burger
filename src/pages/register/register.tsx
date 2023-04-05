@@ -1,3 +1,4 @@
+import { FC, FormEvent } from 'react';
 import {
   Button,
   EmailInput,
@@ -6,15 +7,16 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./register.module.css";
 import { Link, Navigate, useNavigate, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../services/types/index";
 import { registrateUser } from "../../services/actions/auth";
 import { useForm } from "../../hooks/use-form";
+import { TUser } from "../../services/types/data";
 
-export const RegisterPage = () => {
+export const RegisterPage: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const user = useSelector((store) => store.user.user);
+  const user: TUser  = useSelector((store:any) => store.user.user);
 
   const { values, handleValues } = useForm({
     name: "",
@@ -22,7 +24,7 @@ export const RegisterPage = () => {
     password: "",
   });
 
-  const onFormSubmit = (e) => {
+  const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(
       registrateUser(values.email, values.password, values.name, () =>

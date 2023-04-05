@@ -2,20 +2,21 @@ import {
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import { FC, FormEvent } from 'react'
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "../../services/types/index";
 import { Link, Navigate } from "react-router-dom";
 import { useForm } from "../../hooks/use-form";
 import { recoveryPassword } from "../../services/actions/auth";
 import styles from "./forgot-password.module.css";
 
-export const ForgotPasswordPage = () => {
+export const ForgotPasswordPage: FC = () => {
   const { values, handleValues } = useForm({ email: "" });
   const dispatch = useDispatch();
 
   const { recoveryPasswordSuccess } = useSelector((store) => store.user);
 
-  function onSubmit(e) {
+  function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     dispatch(recoveryPassword( values.email ));
   }

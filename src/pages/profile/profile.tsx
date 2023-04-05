@@ -1,3 +1,4 @@
+import { FC, FormEvent, SyntheticEvent } from "react";
 import {
   NavLink,
   useNavigate,
@@ -7,18 +8,17 @@ import {
   Button,
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../services/types/index";
 
 import { logout, updateUserData } from "../../services/actions/auth";
 import styles from "./profile.module.css";
 import { useForm } from "../../hooks/use-form";
-
 import { UserOrders } from "./orders/orders";
 
-export const ProfilePage = () => {
+export const ProfilePage: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((store) => store.user.user);
+  const user = useSelector((store:any) => store.user.user);
 
   const { values, handleValues, setValues } = useForm({
     name: user.name,
@@ -39,12 +39,12 @@ export const ProfilePage = () => {
     dispatch(logout(() => navigate("/", { replace: true })));
   }
 
-  function submit(e) {
+  function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     dispatch(updateUserData(values.email, values.name, values.password));
   }
 
-  function reset(e) {
+  function reset(e: SyntheticEvent) {
     e.preventDefault();
     setValues({
       email: user.email,

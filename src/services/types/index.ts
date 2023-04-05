@@ -5,6 +5,7 @@ import {
 } from "react-redux";
 import { ThunkAction } from 'redux-thunk';
 import { Action, ActionCreator, Dispatch } from 'redux';
+
 import { rootReducer } from "../reducers/rootReducer";
 
 type TApplicationActions = any;
@@ -17,4 +18,3 @@ export type AppThunk<ReturnType = void> = ActionCreator<
 
 export const useSelector: TypedUseSelectorHook<RootState> = selectorHook;
 export const useDispatch = () => dispatchHook<AppDispatch & AppThunk>();
-

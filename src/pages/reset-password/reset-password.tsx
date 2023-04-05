@@ -1,15 +1,16 @@
+import { FC, FormEvent } from 'react';
 import {
   Button,
   Input,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "../../services/types/index";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { useForm } from "../../hooks/use-form";
 import { setPassword } from "../../services/actions/auth";
 import styles from "./reset-password.module.css";
 
-export const ResetPasswordPage = () => {
+export const ResetPasswordPage: FC = () => {
   const dispatch = useDispatch();
   const location = useLocation();
 
@@ -19,7 +20,7 @@ export const ResetPasswordPage = () => {
 
   const { values, handleValues } = useForm({ password: "", code: "" });
 
-  function formSubmit(e) {
+  function formSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     dispatch(setPassword( values.password, values.code ));
   }

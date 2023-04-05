@@ -1,12 +1,10 @@
-import React from 'react';
+import { FC } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import styles from './header.module.css';
-
 import AppHeader from '../../components/app-header/app-header';
 
-
-const Header = () => {
+const Header: FC = () => {
   return (
     <>
       <AppHeader />

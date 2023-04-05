@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect, FC } from "react";
+import { useSelector, useDispatch } from "../../services/types/index";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 
@@ -8,7 +8,7 @@ import BurgerConstructor from "../../components/burger-constructor/burger-constr
 import styles from "./home.module.css";
 import { getBurgerIngredients } from "../../services/actions/burger-ingredients";
 
-export const HomePage = () => {
+export const HomePage: FC = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector((store) => store.burgerIngredients.isLoading);
   const hasError = useSelector((store) => store.burgerIngredients.hasError);

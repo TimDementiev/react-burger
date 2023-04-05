@@ -12,7 +12,7 @@ const OrderDetails: FC = () => {
   const orderNumber = useSelector((store:any) => store.order.number);
 
   useEffect(() => {
-    return dispatch(resetOrderNumber());
+    return () => { dispatch(resetOrderNumber())};
   }, [dispatch]);
 
   useEffect(() => {

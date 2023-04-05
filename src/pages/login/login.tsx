@@ -1,21 +1,22 @@
+import { FC, FormEvent } from 'react'
 import {
   Button,
   EmailInput,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../services/types/index";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "../../hooks/use-form";
 import { authorization } from "../../services/actions/auth";
 import styles from "./login.module.css";
 
-export const LoginPage = () => {
+export const LoginPage: FC = () => {
   const { values, handleValues } = useForm({ email: "", password: "" });
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
 
-  function onSubmit(e) {
+  function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     dispatch(
       authorization(values.email, values.password, () =>

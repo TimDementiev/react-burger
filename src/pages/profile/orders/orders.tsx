@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, FC } from "react";
+import { useDispatch, useSelector } from "../../../services/types/index";
 import { Link, useLocation } from "react-router-dom";
 
 import { OrderCard } from "../../../components/orders/order-card/order-card";
@@ -8,8 +8,9 @@ import {
   wsOrdersConnectionOpen,
 } from "../../../services/actions/ws_orders";
 import styles from "./orders.module.css";
+import { TFeed } from "../../../services/types/data";
 
-export const UserOrders = () => {
+export const UserOrders: FC = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { orders } = useSelector((store) => store.wsOrders);
@@ -25,7 +26,7 @@ export const UserOrders = () => {
     <div className={styles.orderList}>
       {orders &&
         orders
-          .map((order) => {
+          .map((order: TFeed) => {
             return (
               <Link
                 to={`${location.pathname}/${order._id}`}
