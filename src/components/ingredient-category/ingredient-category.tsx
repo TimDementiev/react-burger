@@ -11,7 +11,7 @@ type TProps = {
 }
 
 const IngredientCategory: FC<TProps> = ({tabRef, name, type}) => {
-  const data = useSelector((store:any) => store.burgerIngredients.data);
+  const data = useSelector((store) => store.burgerIngredients.data);
 
   return (
     <section className="mb-10" id={type}>
@@ -19,7 +19,7 @@ const IngredientCategory: FC<TProps> = ({tabRef, name, type}) => {
         {name}
       </h2>
       <ul className={`${ingredientCategoryStyles.ingredients}`}>
-        {data.map((e:any) => {
+        {data.map((e) => {
           if (e.type === type) {
             return (
               <li

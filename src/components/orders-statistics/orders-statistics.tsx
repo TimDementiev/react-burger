@@ -5,7 +5,7 @@ import styles from "./orders-statistics.module.css";
 import { TFeed } from "../../services/types/data";
 
 export const OrdersStatistics: FC = () => {
-  const { total, totalToday, orders } = useSelector((store:any) => store.wsFeed);
+  const { total, totalToday, orders } = useSelector((store) => store.wsFeed);
 
   const filterOrders = (arr: Array<TFeed>) => {
     return arr?.reduce(

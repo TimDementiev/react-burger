@@ -9,7 +9,7 @@ import { resetConstructor } from "../../services/actions/burger-constructor";
 
 const OrderDetails: FC = () => {
   const dispatch = useDispatch();
-  const orderNumber = useSelector((store:any) => store.order.number);
+  const orderNumber = useSelector((store) => store.order.number);
 
   useEffect(() => {
     return () => { dispatch(resetOrderNumber())};

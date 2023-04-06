@@ -41,7 +41,7 @@ export type TAuthState = {
     code: string
   };
 
-  user: TUser | null;
+  user: TUser;
 
   getUserDataRequest: boolean,
   getUserDataFailed: boolean,
@@ -323,7 +323,10 @@ export const authReducer = (state = initialState, action: TAuthActions): TAuthSt
     case LOGOUT_SUCCESS: {
       return {
         ...state,
-        user: null,
+        user: {
+          name: '',
+          email: '',
+        },
         form: {
           ...state.form,
           email: "",

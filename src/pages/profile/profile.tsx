@@ -18,7 +18,7 @@ import { UserOrders } from "./orders/orders";
 export const ProfilePage: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((store:any) => store.user.user);
+  const user = useSelector((store) => store.user.user);
 
   const { values, handleValues, setValues } = useForm({
     name: user.name,

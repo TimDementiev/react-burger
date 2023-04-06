@@ -5,9 +5,6 @@ import { Link, useLocation } from "react-router-dom";
 import styles from "./orders.module.css";
 import { OrderCard } from "./order-card/order-card";
 
-
-
-
 export const Orders: FC = () => {
   const location = useLocation();
   const { orders } = useSelector((store) => store.wsFeed);
@@ -19,7 +16,7 @@ export const Orders: FC = () => {
   return (
     <section className={`${styles.orderList}`}>
       {orders &&
-        orders.map((order:any) => {
+        orders.map((order) => {
           return (
             <Link
               to={`${location.pathname}/${order._id}`}

@@ -16,7 +16,7 @@ export const RegisterPage: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const user: TUser  = useSelector((store:any) => store.user.user);
+  const user: TUser  = useSelector((store) => store.user.user);
 
   const { values, handleValues } = useForm({
     name: "",

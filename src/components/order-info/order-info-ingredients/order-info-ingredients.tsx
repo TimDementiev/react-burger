@@ -2,18 +2,17 @@ import { useMemo, FC } from "react";
 import { useSelector } from "../../../services/types";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
-
 import styles from "./order-info-ingredients.module.css";
 import { TIngredient } from "../../../services/types/data";
 
 export type TOrderInfoDetails = {
-	details: Array<TIngredient>;
-}
+  details: Array<TIngredient>;
+};
 
 export const OrdersInfoIngredients: FC<TOrderInfoDetails> = ({ details }) => {
-  const ingredients = useSelector((store: any) => store.burgerIngredients.data);
+  const ingredients = useSelector((store) => store.burgerIngredients.data);
 
-  const count = (elem: any) => {
+  const count = (elem: TIngredient) => {
     let count = details.filter((item) => {
       return item === elem;
     }).length;
@@ -21,8 +20,8 @@ export const OrdersInfoIngredients: FC<TOrderInfoDetails> = ({ details }) => {
   };
 
   const orderIngredient = useMemo(() => {
-    return details?.map((elem: any) => {
-      return ingredients?.find((item: TIngredient ) => {
+    return details?.map((elem: TIngredient) => {
+      return ingredients?.find((item: TIngredient) => {
         return elem._id === item._id;
       });
     });
@@ -66,4 +65,3 @@ export const OrdersInfoIngredients: FC<TOrderInfoDetails> = ({ details }) => {
     </ul>
   );
 };
-

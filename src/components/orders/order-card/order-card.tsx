@@ -12,7 +12,7 @@ type TOrderCard = {
 }
 
 export const OrderCard: FC<TOrderCard> = ({ order, statusVue }) => {
-  const ingredients = useSelector((store:any) => store.burgerIngredients.data);
+  const ingredients = useSelector((store) => store.burgerIngredients.data);
   const { createdAt, number, name } = order;
   const arrIngredientsLength = order.ingredients.length;
   const hideIngredients = arrIngredientsLength - 6;

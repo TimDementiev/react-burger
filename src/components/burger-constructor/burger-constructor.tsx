@@ -9,7 +9,7 @@ import {
 import burgerConstructorStyles from "./burger-constructor.module.css";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-import { getOrderDetails } from "../../services/actions/order-details.js";
+import { getOrderDetails } from "../../services/actions/order-details";
 import {
   BURGER_CONSTRUCTOR_ADD_BUN,
   BURGER_CONSTRUCTOR_ADD_ITEM,
@@ -22,32 +22,36 @@ interface IDropItem {
   ingredient: TConstructorIngredient;
   _id: string;
   bun: TIngredient;
-  fillings: TConstructorIngredient[]
+  fillings: TConstructorIngredient[];
 }
 
 const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { bun, fillings } = useSelector((store:any) => store.burgerConstructor);
+  const { bun, fillings } = useSelector((store) => store.burgerConstructor);
   const [totalCost, setTotalCost] = useState(0);
   const [modalActive, setModalActive] = useState(false);
-  const isAuthSuccess = useSelector((store:any) => store.user.isAuthSuccess);
+  const isAuthSuccess = useSelector((store) => store.user.isAuthSuccess);
+
   const itemsData = useCallback(() => {
     let itemsId = [];
-    let fillingId = fillings.map((item: any) => item._id);
-    let bunId = [bun._id];
-    itemsId = [bunId, ...fillingId, bunId];
-    return itemsId;
+    let fillingId = fillings.map((item) => item._id);
+    if (bun !== null) {
+      let bunId = [bun._id];
+      itemsId = [bunId, ...fillingId, bunId];
+      return itemsId;
+    }
+    return [];
   }, [fillings, bun]);
 
   const filling = useMemo(
-    () => fillings.filter((item: any) => item.type !== "bun"),
+    () => fillings.filter((item) => item.type !== "bun"),
     [fillings]
   );
 
   useEffect(() => {
     const totalCost = filling.reduce(
-      (current: number , total: any) => current + total.price,
+      (current: number, total) => current + total.price,
       bun === null ? 0 : bun.price * 2
     );
     setTotalCost(totalCost);
@@ -64,7 +68,7 @@ const BurgerConstructor: FC = () => {
     setModalActive(false);
   };
 
-  const orderDetails = (productsid: Array<string>) => {
+  const orderDetails = (productsid: string[] | any ) => {
     dispatch(getOrderDetails(productsid));
   };
 

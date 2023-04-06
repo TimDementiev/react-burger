@@ -52,8 +52,6 @@ export interface IAuthGetUserRequest {
 
 export interface IAuthGetUserSuccess {
   readonly type: typeof GET_USER_DATA_SUCCESS;
-  // readonly user: TUser;
-  // readonly payload: TUser;
   readonly payload: boolean;
 }
 
@@ -67,7 +65,7 @@ export interface IAuthUpdateUserRequest {
 
 export interface IAuthUpdateUserSuccess {
   readonly type: typeof UPDATE_USER_SUCCESS;
-  readonly user: TUser;
+  readonly payload: boolean;
 }
 
 export interface IAuthUpdateUserFailed {
@@ -80,7 +78,6 @@ export interface IAuthRegistrationFormRequest {
 
 export interface IAuthRegistrationFormSuccess {
   readonly type: typeof REGISTRATION_FORM_SUCCESS;
-  // readonly user: TUser;
   readonly payload: boolean;
 }
 
@@ -94,7 +91,6 @@ export interface IAuthLoginRequest {
 
 export interface IAuthLoginSuccess {
   readonly type: typeof LOGIN_SUCCESS;
-  // readonly user: TUser;
   readonly payload: boolean;
 }
 
@@ -121,7 +117,6 @@ export interface IAuthRecoveryPasswordRequest {
 
 export interface IAuthRecoveryPasswordSuccess {
   readonly type: typeof RECOVERY_PASSWORD_SUCCESS;
-  readonly message: string
   readonly payload: boolean;
 }
 
@@ -349,7 +344,8 @@ export function getUserData() {
     getUserDataRequest()
       .then((res) => {
         dispatch({ type: SET_USER_DATA, payload: res.user });
-        dispatch({ type: UPDATE_TOKEN_SUCCESS, payload: null });
+        // dispatch({ type: UPDATE_TOKEN_SUCCESS, payload: null });
+
         dispatch({
           type: GET_USER_DATA_SUCCESS,
           payload: res.success,
@@ -364,7 +360,7 @@ export function getUserData() {
 }
 
 //Обновление данных пользователя
-export function updateUserData(email: string, name: string, password: string) {
+export function updateUserData(email: string , name: string, password: string) {
   return function (dispatch: AppDispatch) {
     dispatch({
       type: UPDATE_USER_REQUEST,

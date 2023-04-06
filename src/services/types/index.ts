@@ -3,15 +3,28 @@ import {
   useDispatch as dispatchHook,
   useSelector as selectorHook,
 } from "react-redux";
-import { ThunkAction } from 'redux-thunk';
-import { Action, ActionCreator, Dispatch } from 'redux';
+import { ThunkAction, ThunkDispatch  } from 'redux-thunk';
+import { Action, ActionCreator } from 'redux';
 
 import { rootReducer } from "../reducers/rootReducer";
+import { TWsFeedActions } from "../actions/ws_feed";
+import { TWsOrdersActions } from "../actions/ws_orders";
+import { TAuthActions } from "../actions/auth";
+import { TConstructorActions } from "../actions/burger-constructor";
+import { TIngredientsActions } from "../actions/burger-ingredients";
+import { TOrderDetailsActions } from "../actions/order-details";
 
-type TApplicationActions = any;
+type TApplicationActions =
+	| TAuthActions
+	| TConstructorActions
+	| TIngredientsActions
+	| TOrderDetailsActions
+	| TWsFeedActions
+	| TWsOrdersActions
 
 export type RootState = ReturnType<typeof rootReducer>;
-export type AppDispatch = Dispatch<TApplicationActions>;
+export type AppDispatch = ThunkDispatch<RootState, never, TApplicationActions>;
+
 export type AppThunk<ReturnType = void> = ActionCreator<
 	ThunkAction<ReturnType, Action, RootState, TApplicationActions>
 >;

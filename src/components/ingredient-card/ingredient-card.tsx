@@ -14,12 +14,12 @@ import { TIngredient } from "../../services/types/data";
 
 const IngredientCard: FC<TIngredient> = (ingredient) => {
   const location = useLocation();
-  const { bun, fillings } = useSelector((store:any) => store.burgerConstructor);
+  const { bun, fillings } = useSelector((store) => store.burgerConstructor);
 
   const [{ opacity }, dragRef] = useDrag({
     type: "fillings",
     item: { ingredient },
-    collect: (monitor: any) => ({
+    collect: (monitor) => ({
       opacity: monitor.isDragging() ? 0.5 : 1,
     }),
   });

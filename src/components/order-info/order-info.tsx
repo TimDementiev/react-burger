@@ -23,11 +23,11 @@ export const OrderInfo: FC = () => {
   const { id } = useParams<{ id: string }>();
   const isProfileOrders = useMatch("/profile/orders/:id");
   const isAllOrders = useMatch("/feed/:id");
-  const ingredients = useSelector((store:any) => store.burgerIngredients.data);
-  const feedOrders = useSelector((store:any) => store.wsFeed.orders);
-  const profileOrders = useSelector((store:any) => store.wsOrders.orders);
+  const ingredients = useSelector((store) => store.burgerIngredients.data);
+  const feedOrders = useSelector((store) => store.wsFeed.orders);
+  const profileOrders = useSelector((store) => store.wsOrders.orders);
   let orders = isProfileOrders ? profileOrders : feedOrders;
-  let order = orders?.find((order: any) => order._id === id);
+  let order = orders?.find((order) => order._id === id);
 
   const orderIngredientsData = useMemo(() => {
     return order?.ingredients.map((id: string) => {
@@ -38,11 +38,14 @@ export const OrderInfo: FC = () => {
   }, [order?.ingredients, ingredients]);
 
   const orderTotalPrice = useMemo(() => {
-    return orderIngredientsData?.reduce((sum: number, item: {type:string, price: number}) => {
+    return orderIngredientsData?.reduce((sum, item) => {
       if (item?.type === "bun") {
         return (sum += item.price);
       }
-      return (sum += item.price);
+      if (item?.type !== ("bun" && undefined)) {
+        return (sum += item.price);
+      }
+      return sum;
     }, 0);
   }, [orderIngredientsData]);
 
@@ -93,7 +96,7 @@ export const OrderInfo: FC = () => {
           )}
           <h3 className={`text text_type_main-medium pb-6`}>Состав:</h3>
           <div>
-            <OrdersInfoIngredients details={orderIngredientsData} />
+            <OrdersInfoIngredients details={orderIngredientsData as Array<TIngredient>} />
           </div>
           <div className={`${styles.total} pt-10`}>
             <p className="text text_type_main-default text_color_inactive pb-10">

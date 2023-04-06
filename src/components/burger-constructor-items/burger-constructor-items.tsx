@@ -37,7 +37,7 @@ const ConstructorItems: FC<TConstructorItems> = ({ index, item }) => {
 
   const [, drop] = useDrop<TDragItem >({
     accept: "item",
-    hover(item: any) {
+    hover(item) {
       if (!ref.current) {
         return;
       }
@@ -54,7 +54,7 @@ const ConstructorItems: FC<TConstructorItems> = ({ index, item }) => {
   const [{ opacity }, drag] = useDrag({
     type: "item",
     item: { id, index },
-    collect: (monitor: any) => {
+    collect: (monitor) => {
       return {
         opacity: monitor.isDragging() ? 0.5 : 1,
       };

@@ -3,15 +3,14 @@ import { useSelector } from "../../services/types/index";
 import { FC } from "react";
 
 import ingredientDetailsStyles from "./ingredient-details.module.css";
-import { TIngredient } from "../../services/types/data";
 
 const IngredientDetails: FC = () => {
   const dataIngredients = useSelector(
-    (store: any) => store.burgerIngredients.data
+    (store) => store.burgerIngredients.data
   );
   const { id } = useParams<{ id: string }>();
   const ingredient = dataIngredients.find(
-    (ingredient: TIngredient) => ingredient._id === id
+    (ingredient) => ingredient._id === id
   );
 
   return (
@@ -24,13 +23,13 @@ const IngredientDetails: FC = () => {
       <div className={`${ingredientDetailsStyles.container}`}>
         <img
           className={`${ingredientDetailsStyles.pic}`}
-          src={ingredient.image_large}
-          alt={ingredient.name}
+          src={ingredient?.image_large}
+          alt={ingredient?.name}
         />
         <h3
           className={`${ingredientDetailsStyles.ingredient} text text_type_main-medium pt-4`}
         >
-          {ingredient.name}
+          {ingredient?.name}
         </h3>
         <ul className={`${ingredientDetailsStyles.list} pt-8`}>
           <li className={`${ingredientDetailsStyles.item}`}>
@@ -42,7 +41,7 @@ const IngredientDetails: FC = () => {
             <p
               className={`${ingredientDetailsStyles.text} text text_type_digits-default text_color_inactive`}
             >
-              {ingredient.calories}
+              {ingredient?.calories}
             </p>
           </li>
           <li className={`${ingredientDetailsStyles.item}`}>
@@ -54,7 +53,7 @@ const IngredientDetails: FC = () => {
             <p
               className={`${ingredientDetailsStyles.text} text text_type_digits-default text_color_inactive`}
             >
-              {ingredient.proteins}
+              {ingredient?.proteins}
             </p>
           </li>
           <li className={`${ingredientDetailsStyles.item}`}>
@@ -66,7 +65,7 @@ const IngredientDetails: FC = () => {
             <p
               className={`${ingredientDetailsStyles.text} text text_type_digits-default text_color_inactive`}
             >
-              {ingredient.fat}
+              {ingredient?.fat}
             </p>
           </li>
           <li className={`${ingredientDetailsStyles.item}`}>
@@ -78,7 +77,7 @@ const IngredientDetails: FC = () => {
             <p
               className={`${ingredientDetailsStyles.text} text text_type_digits-default text_color_inactive`}
             >
-              {ingredient.carbohydrates}
+              {ingredient?.carbohydrates}
             </p>
           </li>
         </ul>

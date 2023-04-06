@@ -1,5 +1,4 @@
 import { useEffect, FC } from "react";
-// import { useSelector, useDispatch } from "react-redux";
 import { useSelector, useDispatch } from "../../services/types/index";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 
@@ -32,7 +31,7 @@ const App: FC = () => {
   const location = useLocation();
   const accessToken = getCookie("token");
   const dataRequest = useSelector(
-    (store: any) => store.burgerIngredients.dataRequest
+    (store) => store.burgerIngredients.dataRequest
   );
 
   const background =

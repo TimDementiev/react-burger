@@ -1,6 +1,5 @@
 import { Middleware, MiddlewareAPI } from "redux";
 import { getCookie } from "../../utils/cookie";
-// import { updateToken } from "../actions/auth";
 import { TWSActions } from "../types/data";
 
 export const socketMiddleware = (wsUrl: string, wsActions: TWSActions): Middleware => {
@@ -43,10 +42,6 @@ export const socketMiddleware = (wsUrl: string, wsActions: TWSActions): Middlewa
 
           dispatch({ type: onMessage, payload: restParsedData });
 
-          // if (restParsedData.message === "Invalid or missing token") {
-          //   // dispatch(updateToken());
-          //   dispatch({ type: wsFailed });
-          // }
         };
 
         socket.onclose = (event: CloseEvent) => {
