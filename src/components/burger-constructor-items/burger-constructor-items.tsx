@@ -4,7 +4,6 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useDispatch } from "../../services/types/index";
-// @ts-ignore
 import { useDrag, useDrop } from "react-dnd";
 import {
   BURGER_CONSTRUCTOR_DELETE_ITEM,

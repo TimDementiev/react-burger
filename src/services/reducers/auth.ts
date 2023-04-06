@@ -1,3 +1,5 @@
+import { TAuthActions } from "../actions/auth";
+
 import {
   SET_USER_DATA,
   GET_USER_DATA_REQUEST,
@@ -28,7 +30,61 @@ import {
   AUTH_CHECKED_FAILED,
 } from "../actions/auth";
 
-const initialState = {
+import { TUser } from '../types/data'
+
+export type TAuthState = {
+  isAuthSuccess: boolean;
+  form: {
+    name: string,
+    email: string,
+    password: string,
+    code: string
+  };
+
+  user: TUser | null;
+
+  getUserDataRequest: boolean,
+  getUserDataFailed: boolean,
+  getUserDataSuccess: boolean,
+  getUserDataResponse: boolean | null;
+
+  updateUserDataRequest: boolean,
+  updateUserDataFailed: boolean,
+  updateUserDataSuccess: boolean,
+  updateUserDataResponse: boolean | null;
+
+  registrationRequest: boolean,
+  registrateUserFailed: boolean,
+  registrateUserSuccess: boolean,
+  registrateResponse: boolean | null;
+
+  authorizationRequest: boolean,
+  authorizationFailed: boolean,
+  authorizationSuccess: boolean,
+  authorizationResponse: boolean | null;
+
+  logoutRequest: boolean,
+  logoutFailed: boolean,
+  logoutSuccess: boolean,
+  logoutResponse: boolean | null;
+
+  recoveryPasswordRequest: boolean,
+  recoveryPasswordFailed: boolean,
+  recoveryPasswordSuccess: boolean,
+  recoveryPasswordResponse: boolean | null;
+
+  setPasswordRequest: boolean,
+  setPasswordFailed: boolean,
+  setPasswordSuccess: boolean,
+  setPasswordResponse: boolean | null;
+
+  updateTokenRequest: boolean,
+  updateTokenFailed: boolean,
+  updateTokenSuccess: boolean,
+  updateTokenResponse: boolean | null;
+}
+
+const initialState: TAuthState = {
   isAuthSuccess: false,
 
   form: {
@@ -38,7 +94,10 @@ const initialState = {
     code: "",
   },
 
-  user: null,
+  user: {
+    email: "",
+    name: "",
+  },
 
   getUserDataRequest: false,
   getUserDataFailed: false,
@@ -81,7 +140,7 @@ const initialState = {
   updateTokenResponse: null,
 };
 
-export const authReducer = (state = initialState, action) => {
+export const authReducer = (state = initialState, action: TAuthActions): TAuthState => {
   switch (action.type) {
     case AUTH_CHECKED: {
       return {
@@ -305,7 +364,7 @@ export const authReducer = (state = initialState, action) => {
           ...state.form,
           email: "",
         },
-        message: action.message,
+        // message: action.message,
         recoveryPasswordRequest: false,
         recoveryPasswordFailed: false,
         recoveryPasswordSuccess: true,

@@ -1,4 +1,3 @@
-// @ts-ignore
 import { useDrag } from "react-dnd";
 import { useMemo, FC } from "react";
 import { useSelector } from "../../services/types/index";

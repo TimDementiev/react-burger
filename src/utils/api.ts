@@ -1,4 +1,4 @@
-import { getCookie, setCookie } from "../utils/cookie";
+import { getCookie, setCookie } from "./cookie";
 
 export const api = {
   url: "https://norma.nomoreparties.space/api",
@@ -7,11 +7,11 @@ export const api = {
   },
 };
 
-export const checkResponse = (res) => {
+export const checkResponse = (res: Response) => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 };
 
-function request(url, options) {
+function request(url: string, options: RequestInit) {
   return fetch(url, options).then(checkResponse);
 }
 
@@ -24,19 +24,19 @@ export const getInitialData = async () => {
 };
 
 //Отправка заказа
-export const getOrderData = async (ingredientsData) => {
+export const getOrderData = async (ingredientsData: Array<string>) => {
   return await request(`${api.url}/orders`, {
     method: "POST",
     body: JSON.stringify({ ingredients: ingredientsData }),
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer " + getCookie("token"),
+      authorization: "Bearer " + getCookie("token"),
     },
   });
 };
 
 //Авторизация пользователя
-export const authorizationRequest = async (email, password) => {
+export const authorizationRequest = async (email: string, password: string) => {
   return await request(`${api.url}/auth/login`, {
     method: "POST",
     headers: api.headers,
@@ -48,7 +48,7 @@ export const authorizationRequest = async (email, password) => {
 };
 
 //Регистрация пользователя
-export const registrationRequest = async (email, password, name) => {
+export const registrationRequest = async (email: string, password: string, name: string) => {
   return await request(`${api.url}/auth/register`, {
     method: "POST",
     headers: api.headers,
@@ -72,23 +72,23 @@ export const updateTokenRequest = async () => {
 };
 
 //Получение данных пользователя
-export const getUserDataRequest = async (accessToken) => {
+export const getUserDataRequest = async () => {
   return await fetchWithRefresh(`${api.url}/auth/user`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json; charset=utf-8",
-      authorization: `Bearer ${accessToken}`,
+      authorization: `Bearer ${getCookie('token')}`,
     },
   });
 };
 
 //Обновление данных пользователя
-export const updateUserDataRequest = async (email, name, password) => {
+export const updateUserDataRequest = async (email: string, name: string, password: string) => {
   return await fetchWithRefresh(`${api.url}/auth/user`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer " + getCookie("token"),
+      authorization: `Bearer ${getCookie('token')}`,
     },
     body: JSON.stringify({
       email: email,
@@ -99,11 +99,20 @@ export const updateUserDataRequest = async (email, name, password) => {
 };
 
 //Обновление токена для обработки данных пользователя
-export const fetchWithRefresh = async (url, options) => {
+type TFetchOptions = {
+  method: string;
+  headers: {
+    "Content-Type": string;
+    "authorization": string;
+  };
+  body?: string
+}
+
+export const fetchWithRefresh = async (url: string, options: TFetchOptions) => {
   try {
     const res = await fetch(url, options);
     return await checkResponse(res);
-  } catch (err) {
+  } catch (err: any) {
     if (err.message === "jwt expired") {
       const refreshToken = await updateTokenRequest();
       const accessToken = refreshToken.accessToken.split("Bearer ")[1];
@@ -113,7 +122,7 @@ export const fetchWithRefresh = async (url, options) => {
       }
       localStorage.setItem("refreshToken", refreshToken.refreshToken);
       setCookie("token", accessToken);
-      options.headers.Authorization = refreshToken.accessToken;
+      options.headers.authorization = refreshToken.accessToken;
       const res = await fetch(url, options);
       return await checkResponse(res);
     } else {
@@ -134,7 +143,7 @@ export const logoutRequest = async () => {
 };
 
 //Восстановление пароля
-export const recoveryPasswordRequest = async (email) => {
+export const recoveryPasswordRequest = async (email: string) => {
   return await request(`${api.url}/password-reset`, {
     method: "POST",
     headers: api.headers,
@@ -145,7 +154,7 @@ export const recoveryPasswordRequest = async (email) => {
 };
 
 //Сброс пароля пользователя
-export const setPasswordRequest = async (password, code) => {
+export const setPasswordRequest = async (password: string, code: string) => {
   return await request(`${api.url}/password-reset/reset`, {
     method: "POST",
     headers: api.headers,

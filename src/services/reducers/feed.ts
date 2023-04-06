@@ -1,3 +1,5 @@
+import { TWsFeedActions } from "../actions/ws_feed";
+import { TFeed } from "../types/data";
 import {
   WS_FEED_CONNECTION_SUCCESS,
   WS_FEED_CONNECTION_ERROR,
@@ -5,7 +7,15 @@ import {
   WS_FEED_GET_MESSAGE,
 } from "../actions/ws_feed";
 
-const initialState = {
+export type TFeedState = {
+  wsConnected: boolean,
+  orders: Array<TFeed>,
+  total: number,
+  totalToday: number,
+  error: MessageEvent | null,
+}
+
+const initialState: TFeedState = {
   wsConnected: false,
   orders: [],
   total: 0,
@@ -13,7 +23,7 @@ const initialState = {
   error: null,
 }
 
-export const feedReducer = (state = initialState, action) => {
+export const feedReducer = (state = initialState, action: TWsFeedActions): TFeedState => {
   switch (action.type) {
     case WS_FEED_CONNECTION_SUCCESS:
       return {

@@ -1,14 +1,16 @@
+import { Middleware, MiddlewareAPI } from "redux";
 import { getCookie } from "../../utils/cookie";
-import { updateToken } from "../actions/auth";
+// import { updateToken } from "../actions/auth";
+import { TWSActions } from "../types/data";
 
-export const socketMiddleware = (wsUrl, wsActions) => {
-  return (store) => {
-    let socket = null;
+export const socketMiddleware = (wsUrl: string, wsActions: TWSActions): Middleware => {
+  return (store: MiddlewareAPI) => {
+    let socket: WebSocket | null = null;
 
     return (next) => (action) => {
       const { dispatch, getState } = store;
       const { type, payload } = action;
-      const { wsInit, wsSendMessage, onOpen, onClose, onError, onMessage } =
+      const { wsInit, wsSendMessage, onOpen, onClose, onError, onMessage, } =
         wsActions;
       const { user } = getState().user;
 
@@ -34,19 +36,20 @@ export const socketMiddleware = (wsUrl, wsActions) => {
           dispatch({ type: onError, payload: event });
         };
 
-        socket.onmessage = (event) => {
+        socket.onmessage = (event: MessageEvent) => {
           const { data } = event;
           const parsedData = JSON.parse(data);
           const { success, ...restParsedData } = parsedData;
 
           dispatch({ type: onMessage, payload: restParsedData });
 
-          if (restParsedData.message === "Invalid or missing token") {
-            dispatch(updateToken());
-          }
+          // if (restParsedData.message === "Invalid or missing token") {
+          //   // dispatch(updateToken());
+          //   dispatch({ type: wsFailed });
+          // }
         };
 
-        socket.onclose = (event) => {
+        socket.onclose = (event: CloseEvent) => {
           dispatch({ type: onClose, payload: event });
         };
 

@@ -41,13 +41,20 @@ export const UPDATE_TOKEN_FAILED: "UPDATE_TOKEN_FAILED" = "UPDATE_TOKEN_FAILED";
 export const AUTH_CHECKED: "AUTH_CHECKED" = "AUTH_CHECKED";
 export const AUTH_CHECKED_FAILED: "AUTH_CHECKED_FAILED" = "AUTH_CHECKED_FAILED";
 
+export interface ISetUser {
+  readonly type: typeof SET_USER_DATA;
+  readonly payload: TUser;
+}
+
 export interface IAuthGetUserRequest {
   readonly type: typeof GET_USER_DATA_REQUEST;
 }
 
 export interface IAuthGetUserSuccess {
   readonly type: typeof GET_USER_DATA_SUCCESS;
-  readonly user: TUser;
+  // readonly user: TUser;
+  // readonly payload: TUser;
+  readonly payload: boolean;
 }
 
 export interface IAuthGetUserFailed {
@@ -73,7 +80,8 @@ export interface IAuthRegistrationFormRequest {
 
 export interface IAuthRegistrationFormSuccess {
   readonly type: typeof REGISTRATION_FORM_SUCCESS;
-  readonly user: TUser;
+  // readonly user: TUser;
+  readonly payload: boolean;
 }
 
 export interface IAuthRegistrationFormFailed {
@@ -86,7 +94,8 @@ export interface IAuthLoginRequest {
 
 export interface IAuthLoginSuccess {
   readonly type: typeof LOGIN_SUCCESS;
-  readonly user: TUser;
+  // readonly user: TUser;
+  readonly payload: boolean;
 }
 
 export interface IAuthLoginFailed {
@@ -99,6 +108,7 @@ export interface IAuthLogoutRequest {
 
 export interface IAuthLogoutSuccess {
   readonly type: typeof LOGOUT_SUCCESS;
+  readonly payload: boolean;
 }
 
 export interface IAuthLogoutFailed {
@@ -112,6 +122,7 @@ export interface IAuthRecoveryPasswordRequest {
 export interface IAuthRecoveryPasswordSuccess {
   readonly type: typeof RECOVERY_PASSWORD_SUCCESS;
   readonly message: string
+  readonly payload: boolean;
 }
 
 export interface IAuthRecoveryPasswordFailed {
@@ -124,6 +135,7 @@ export interface IAuthResetPasswordRequest {
 
 export interface IAuthResetPasswordSuccess {
   readonly type: typeof SET_PASSWORD_SUCCESS;
+  readonly payload: boolean;
 }
 
 export interface IAuthResetPasswordFailed {
@@ -136,6 +148,7 @@ export interface IAuthUpdateTokenReset {
 
 export interface IAuthUpdateTokenSuccess {
   readonly type: typeof UPDATE_TOKEN_SUCCESS;
+  readonly payload: boolean;
 }
 
 export interface IAuthUpdateTokenFailed {
@@ -151,6 +164,7 @@ export interface IAuthCheckedFailed {
 }
 
 export type TAuthActions =
+  | ISetUser
   | IAuthGetUserRequest
   | IAuthGetUserSuccess
   | IAuthGetUserFailed
